@@ -10,20 +10,22 @@ mixin EndpointCaller {
   String get base;
   String get endpoint;
 
-  Future<dynamic> call(Map<String, dynamic> queries) async {
-    final url = 'https://$base/$endpoint?${queries.build()}';
+  Future<dynamic> call([ Map<String, dynamic>? queries ]) async {
+    final url = 'https://$base/$endpoint${queries?.build()}';
     final uri = Uri.parse(url);
     final response = await get(uri);
-    return jsonDecode(response.body);
+    return response.body.decode();
   }
 }
 
 extension on Map<String, dynamic> {
-  String build() => entries
+  String build() => '?${entries
     .map((e) => '${e.key.encode()}=${'${e.value}'.encode()}')
-    .join('&');
+    .join('&')}';
 }
 
 extension on String {
   String encode() => Uri.encodeComponent(this);
+
+  dynamic decode() => isNotEmpty ? jsonDecode(this) : null;
 }
