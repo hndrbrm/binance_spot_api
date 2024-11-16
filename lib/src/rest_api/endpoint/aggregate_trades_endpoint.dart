@@ -2,9 +2,9 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
-import 'data_source.dart';
-import 'endpoint_caller.dart';
-import 'http_method.dart';
+import '../data_source.dart';
+import '../endpoint_caller.dart';
+import '../http_method.dart';
 
 /// Get compressed, aggregate trades. Trades that fill at the time, from
 /// the same taker order, with the same price will have the quantity aggregated.
@@ -13,8 +13,8 @@ import 'http_method.dart';
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#compressedaggregate-trades-list
 mixin AggregateTradesEndpoint on EndpointCaller {
   static const method = HttpMethod.get;
-  static const weight = 2;
   static const dataSource = DataSource.database;
+  static const weight = 2;
 
   @override
   String get endpoint => 'api/v3/aggTrades';

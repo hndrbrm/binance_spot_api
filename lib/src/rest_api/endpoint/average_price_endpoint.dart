@@ -2,9 +2,9 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
-import 'data_source.dart';
-import 'endpoint_caller.dart';
-import 'http_method.dart';
+import '../data_source.dart';
+import '../endpoint_caller.dart';
+import '../http_method.dart';
 
 /// Current average price for a symbol.
 ///
@@ -12,8 +12,8 @@ import 'http_method.dart';
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#current-average-price
 mixin AveragePriceEndpoint on EndpointCaller {
   static const method = HttpMethod.get;
-  static const weight = 2;
   static const dataSource = DataSource.memory;
+  static const weight = 2;
 
   @override
   String get endpoint => 'api/v3/avgPrice';

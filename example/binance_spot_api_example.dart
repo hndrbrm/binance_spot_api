@@ -6,6 +6,6 @@ import 'package:binance_spot_api/binance_spot_api.dart';
 
 Future<void> main() async {
   final client = MarketDataOnly();
-  final data = await client.averagePrice('BTCUSDT');
+  final data = await client.orderBook(symbol: 'BTCUSDT');
   print(data.toJson());
 }
