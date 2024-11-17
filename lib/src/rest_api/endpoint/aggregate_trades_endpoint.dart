@@ -12,12 +12,10 @@ import '../http_method.dart';
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#compressedaggregate-trades-list
 mixin AggregateTradesEndpoint on EndpointCaller {
-  static const method = HttpMethod.get;
   static const dataSource = DataSource.database;
+  static const endpoint = 'api/v3/aggTrades';
+  static const method = HttpMethod.get;
   static const weight = 2;
-
-  @override
-  String get endpoint => 'api/v3/aggTrades';
 
   /// If [fromId], [startTime], and [endTime] are not sent, the most recent
   /// aggregate trades will be returned.
@@ -28,32 +26,59 @@ mixin AggregateTradesEndpoint on EndpointCaller {
     int? endTime,
     int? limit,
   }) async {
-    final queries = {
-      'symbol': symbol,
+    final queries = _Parameter(
+      symbol: symbol,
+      fromId: fromId,
+      startTime: startTime,
+      endTime: endTime,
+      limit: limit,
+    ).toQueries();
 
-      /// ID to get aggregate trades from INCLUSIVE.
-      if (fromId != null)
-      'fromId': fromId,
-
-      /// Timestamp in ms to get aggregate trades from INCLUSIVE.
-      if (startTime != null)
-      'startTime': startTime,
-
-      /// Timestamp in ms to get aggregate trades until INCLUSIVE.
-      if (endTime != null)
-      'endTime': endTime,
-
-      /// Default 500; max 1000.
-      if (limit != null)
-      'limit': limit,
-    };
-
-    final json = call(queries) as List<dynamic>;
+    final json = call(
+      endpoint: endpoint,
+      queries: queries,
+    ) as List<dynamic>;
 
     return json
       .map((e) => AggregateTrade.fromJson(e))
       .toList();
   }
+}
+
+final class _Parameter {
+  const _Parameter({
+    required this.symbol,
+    this.fromId,
+    this.startTime,
+    this.endTime,
+    this.limit,
+  });
+
+  final String symbol;
+
+  /// ID to get aggregate trades from INCLUSIVE.
+  final int? fromId;
+
+  /// Timestamp in ms to get aggregate trades from INCLUSIVE.
+  final int? startTime;
+
+  /// Timestamp in ms to get aggregate trades until INCLUSIVE.
+  final int? endTime;
+
+  /// Default 500; max 1000.
+  final int? limit;
+
+  Map<String, dynamic> toQueries() => {
+    'symbol': symbol,
+    if (fromId != null)
+    'fromId': fromId,
+    if (startTime != null)
+    'startTime': startTime,
+    if (endTime != null)
+    'endTime': endTime,
+    if (limit != null)
+    'limit': limit,
+  };
 }
 
 final class AggregateTrade {

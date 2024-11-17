@@ -11,12 +11,10 @@ import '../http_method.dart';
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#test-connectivity
 mixin TestConnectivityEndpoint on EndpointCaller {
-  static const method = HttpMethod.get;
   static const dataSource = DataSource.memory;
+  static const endpoint = 'api/v3/ping';
+  static const method = HttpMethod.get;
   static const weight = 1;
 
-  @override
-  String get endpoint => 'api/v3/ping';
-
-  Future<void> testConnectivity() => call();
+  Future<void> testConnectivity() => call(endpoint: endpoint);
 }

@@ -8,10 +8,12 @@ import 'package:http/http.dart';
 
 mixin EndpointCaller {
   String get base;
-  String get endpoint;
 
-  Future<dynamic> call([ Map<String, dynamic>? queries ]) async {
-    final url = 'https://$base/$endpoint${queries?.build()}';
+  Future<dynamic> call({
+    required String endpoint,
+    Map<String, dynamic>? queries
+  }) async {
+    final url = 'https://$base/$endpoint${queries?.build() ?? ''}';
     final uri = Uri.parse(url);
     final response = await get(uri);
     return response.body.decode();

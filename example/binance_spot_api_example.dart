@@ -6,5 +6,6 @@ import 'package:binance_spot_api/binance_spot_api.dart';
 
 Future<void> main() async {
   final client = MarketDataOnly();
-  await client.testConnectivity();
+  final a = await client.serverTime();
+  print(a.toJson());
 }

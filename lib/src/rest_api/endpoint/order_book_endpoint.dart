@@ -9,8 +9,9 @@ import '../http_method.dart';
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#order-book
 mixin OrderBookEndpoint on EndpointCaller {
-  static const method = HttpMethod.get;
   static const dataSource = DataSource.memory;
+  static const endpoint = 'api/v3/depth';
+  static const method = HttpMethod.get;
 
   /// Adjusted based on the [limit].
   int weight(int limit) =>
@@ -22,9 +23,6 @@ mixin OrderBookEndpoint on EndpointCaller {
       _ => throw UnimplementedError('$limit'),
     };
 
-  @override
-  String get endpoint => 'api/v3/depth';
-
   Future<OrderBook> orderBook({
     required String symbol,
     int? limit,
@@ -34,7 +32,10 @@ mixin OrderBookEndpoint on EndpointCaller {
       limit: limit,
     ).toQueries();
 
-    final json = await call(queries) as Map<String, dynamic>;
+    final json = await call(
+      endpoint: endpoint,
+      queries: queries,
+    ) as Map<String, dynamic>;
 
     return OrderBook.fromJson(json);
   }

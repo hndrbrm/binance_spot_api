@@ -11,20 +11,31 @@ import '../http_method.dart';
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#current-average-price
 mixin AveragePriceEndpoint on EndpointCaller {
-  static const method = HttpMethod.get;
   static const dataSource = DataSource.memory;
+  static const endpoint = 'api/v3/avgPrice';
+  static const method = HttpMethod.get;
   static const weight = 2;
 
-  @override
-  String get endpoint => 'api/v3/avgPrice';
-
   Future<AveragePrice> averagePrice(String symbol) async {
-    final queries = { 'symbol': symbol };
+    final queries = _Parameter(symbol).toQueries();
 
-    final json = await call(queries) as Map<String, dynamic>;
+    final json = await call(
+      endpoint: endpoint,
+      queries: queries,
+    ) as Map<String, dynamic>;
 
     return AveragePrice.fromJson(json);
   }
+}
+
+final class _Parameter {
+  const _Parameter(this.symbol);
+
+  final String symbol;
+
+  Map<String, dynamic> toQueries() => {
+    'symbol': symbol,
+  };
 }
 
 final class AveragePrice {
