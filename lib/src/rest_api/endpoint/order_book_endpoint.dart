@@ -14,7 +14,7 @@ mixin OrderBookEndpoint on EndpointCaller {
   static const method = HttpMethod.get;
 
   /// Adjusted based on the [limit].
-  int weight(int limit) =>
+  static int weight(int limit) =>
     switch (limit) {
       >0 && <=100 => 5,
       >100 && <=500 => 25,

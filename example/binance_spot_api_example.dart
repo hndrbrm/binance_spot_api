@@ -6,6 +6,8 @@ import 'package:binance_spot_api/binance_spot_api.dart';
 
 Future<void> main() async {
   final client = MarketDataOnly();
-  final a = await client.serverTime();
-  print(a.toJson());
+  final a = await client.ticker24h(symbols: ['BTCUSDT', 'RPLUSDT']);
+  for (final ticker in a) {
+    print(ticker.toJson());
+  }
 }
