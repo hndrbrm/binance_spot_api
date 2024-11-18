@@ -6,6 +6,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 
+import '../error/error_exception.dart';
+import 'http_return_code.dart';
+
 mixin EndpointCaller {
   String get base;
 
@@ -16,7 +19,13 @@ mixin EndpointCaller {
     final url = 'https://$base/$endpoint${queries?.build() ?? ''}';
     final uri = Uri.parse(url);
     final response = await get(uri);
-    return response.body.decode();
+    final code = HttpReturnCode.parse(response.statusCode);
+    if (code == HttpReturnCode.ok) {
+      return response.body.decode();
+    } else {
+      final json = jsonDecode(response.body);
+      throw ErrorException.fromJson(json);
+    }
   }
 }
 

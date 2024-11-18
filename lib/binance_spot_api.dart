@@ -4,4 +4,6 @@
 
 library;
 
+export 'src/error/error_exception.dart';
+export 'src/rest_api/endpoint/candlestick_endpoint.dart';
 export 'src/rest_api/market_data_only.dart';
