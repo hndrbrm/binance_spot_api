@@ -9,6 +9,7 @@ import 'endpoint/order_book_endpoint.dart';
 import 'endpoint/server_time_endpoint.dart';
 import 'endpoint/test_connectivity_endpoint.dart';
 import 'endpoint/ticker_24h.dart';
+import 'endpoint/ticker_book.dart';
 import 'endpoint_caller.dart';
 
 /// No API key (authentication) required, and serve public market data only.
@@ -16,7 +17,7 @@ final class MarketDataOnly with
   EndpointCaller,
   AggregateTradesEndpoint, AveragePriceEndpoint, CandlestickEndpoint,
   OrderBookEndpoint, ServerTimeEndpoint, TestConnectivityEndpoint,
-  Ticker24hEndpoint
+  Ticker24hEndpoint, TickerBookEndpoint
 {
   @override
   String get base => 'data-api.binance.vision';
