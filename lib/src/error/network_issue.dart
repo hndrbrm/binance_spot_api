@@ -60,6 +60,121 @@ enum NetworkIssue implements ErrorCode {
   /// https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#-1008-server_busy
   serverBusy,
 
+  /// This code is sent when an error has been returned by the matching engine.
+  /// The following messages which will indicate the specific error:
+  ///
+  /// * "Unknown order sent."
+  /// The order (by either orderId, clOrdId, origClOrdId) could not be found.
+  ///
+  /// * "Duplicate order sent."
+  /// The clOrdId is already in use.
+  ///
+  /// * "Market is closed."
+  /// The symbol is not trading.
+  ///
+  /// * "Account has insufficient balance for requested action."
+  /// Not enough funds to complete the action.
+  ///
+  /// * "Market orders are not supported for this symbol."
+  /// MARKET is not enabled on the symbol.
+  ///
+  /// * "Iceberg orders are not supported for this symbol."
+  /// icebergQty is not enabled on the symbol.
+  ///
+  /// * "Stop loss orders are not supported for this symbol."
+  /// STOP_LOSS is not enabled on the symbol.
+  ///
+  /// * "Stop loss limit orders are not supported for this symbol."
+  /// STOP_LOSS_LIMIT is not enabled on the symbol.
+  ///
+  /// * "Take profit orders are not supported for this symbol."
+  /// TAKE_PROFIT is not enabled on the symbol.
+  ///
+  /// * "Take profit limit orders are not supported for this symbol."
+  /// TAKE_PROFIT_LIMIT is not enabled on the symbol.
+  ///
+  /// * "Price * QTY is zero or less."
+  /// price * quantity is too low.
+  ///
+  /// * "IcebergQty exceeds QTY."
+  /// icebergQty must be less than the order quantity.
+  ///
+  /// * "This action is disabled on this account."
+  /// Contact customer support; some actions have been disabled on the account.
+  ///
+  /// * "This account may not place or cancel orders."
+  /// Contact customer support; the account has trading ability disabled.
+  ///
+  /// * "Unsupported order combination"
+  /// The orderType, timeInForce, stopPrice, and/or icebergQty combination
+  /// isn't allowed.
+  ///
+  /// * "Order would trigger immediately."
+  /// The order's stop price is not valid when compared to the last traded
+  /// price.
+  ///
+  /// * "Cancel order is invalid. Check origClOrdId and orderId."
+  /// No origClOrdId or orderId was sent in.
+  ///
+  /// * "Order would immediately match and take."
+  /// LIMIT_MAKER order type would immediately match and trade, and not be
+  /// a pure maker order.
+  ///
+  /// * "The relationship of the prices for the orders is not correct."
+  /// The prices set in the OCO is breaking the Price restrictions.
+  /// For reference:
+  /// BUY : LIMIT_MAKER price < Last Traded Price < stopPrice
+  /// SELL : LIMIT_MAKER price > Last Traded Price > stopPrice
+  ///
+  /// * "OCO orders are not supported for this symbol"
+  /// OCO is not enabled on the symbol.
+  ///
+  /// * "Quote order qty market orders are not support for this symbol."
+  /// MARKET orders using the parameter quoteOrderQty are not enabled on
+  /// the symbol.
+  ///
+  /// * "Trailing stop orders are not supported for this symbol."
+  /// Orders using trailingDelta are not enabled on the symbol.
+  ///
+  /// * "Order cancel-replace is not supported for this symbol."
+  /// POST /api/v3/order/cancelReplace (REST API) or order.cancelReplace
+  /// (WebSocket API) is not enabled on the symbol.
+  ///
+  /// * "This symbol is not permitted for this account."
+  /// Account and symbol do not have the same permissions.
+  /// (e.g. SPOT, MARGIN, etc)
+  ///
+  /// * "This symbol is restricted for this account."
+  /// Account is unable to trade on that symbol. (e.g. An ISOLATED_MARGIN
+  /// account cannot place SPOT orders.)
+  ///
+  /// * "Order was not canceled due to cancel restrictions."
+  /// Either cancelRestrictions was set to ONLY_NEW but the order status
+  /// was not NEW or cancelRestrictions was set to ONLY_PARTIALLY_FILLED
+  /// but the order status was not PARTIALLY_FILLED.
+  ///
+  /// * "Rest API trading is not enabled."
+  /// * "WebSocket API trading is not enabled."
+  /// Order is being placed or a server that is not configured to allow access
+  /// to TRADE endpoints.
+  ///
+  /// * "Order book liquidity is less than LOT_SIZE filter minimum quantity."
+  /// Quote quantity market orders cannot be placed when the order book
+  /// liquidity is less than minimum quantity configured for the LOT_SIZE
+  /// filter.
+  ///
+  /// * "Order book liquidity is less than MARKET_LOT_SIZE filter minimum quantity."
+  /// Quote quantity market orders cannot be placed when the order book
+  /// liquidity is less than the minimum quantity for MARKET_LOT_SIZE filter.
+  ///
+  /// * "Order book liquidity is less than symbol minimum quantity."
+  /// Quote quantity market orders cannot be placed when there are no orders
+  /// on the book.
+  ///
+  /// Reference:
+  /// https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#messages-for--1010-error_msg_received--2010-new_order_rejected-and--2011-cancel_rejected
+  errorMsgReceived,
+
   /// The request is rejected by the API. (i.e. The request didn't reach the
   /// Matching Engine.)
   ///
@@ -121,6 +236,7 @@ enum NetworkIssue implements ErrorCode {
       -1006 => unexpectedResp,
       -1007 => timeout,
       -1008 => serverBusy,
+      -1010 => errorMsgReceived,
       -1013 => invalidMessage,
       -1014 => unknownOrderComposition,
       -1015 => tooManyOrders,
@@ -140,6 +256,7 @@ enum NetworkIssue implements ErrorCode {
     unexpectedResp => -1006,
     timeout => -1007,
     serverBusy => -1008,
+    errorMsgReceived => -1010,
     invalidMessage => -1013,
     unknownOrderComposition => -1014,
     tooManyOrders => -1015,

@@ -2,9 +2,9 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
-import 'package:binance_spot_api/src/error/request_issue.dart';
-
-import 'network_error.dart';
+import 'network_issue.dart';
+import 'other_issue.dart';
+import 'request_issue.dart';
 
 /// Errors consist of two parts: an error code and a message.
 /// Codes are universal, but messages can vary.
@@ -41,6 +41,7 @@ abstract class ErrorCode {
     switch (code) {
       <=-1000 && >-1100 => NetworkIssue.parse(code),
       <=-1100 && >-1200 => RequestIssue.parse(code),
+      <=-2000 && >-2100 => OtherIssue.parse(code),
       _ => throw UnimplementedError('$code'),
     };
 }
