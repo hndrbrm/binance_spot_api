@@ -8,13 +8,13 @@ import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
 
-/// Best price/qty on the order book for a symbol or symbols.
+/// Latest price for a symbol or symbols.
 ///
 /// Reference:
-/// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#symbol-order-book-ticker
-mixin TickerBookEndpoint on EndpointCaller {
+/// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#symbol-price-ticker
+mixin TickerPriceEndpoint on EndpointCaller {
   static const dataSource = DataSource.memory;
-  static const endpoint = 'api/v3/ticker/bookTicker';
+  static const endpoint = 'api/v3/ticker/price';
   static const method = HttpMethod.get;
 
   static int weight(List<String>? symbols) =>
@@ -25,7 +25,7 @@ mixin TickerBookEndpoint on EndpointCaller {
       _ => throw UnsupportedError('Should not happened!'),
     };
 
-  Future<List<TickerBook>> tickerBook([ List<String>? symbols ]) async {
+  Future<List<TickerPrice>> tickerPrice([ List<String>? symbols ]) async {
     final queries = _Parameter(symbols).toQueries();
 
     final json = await call(
@@ -35,13 +35,13 @@ mixin TickerBookEndpoint on EndpointCaller {
 
     if (json is Map) {
       return [
-        TickerBook.fromJson(json as Map<String, dynamic>)
+        TickerPrice.fromJson(json as Map<String, dynamic>)
       ];
     }
 
     return (json as List<dynamic>)
       .map((e) => e as Map<String, dynamic>)
-      .map((e) => TickerBook.fromJson(e))
+      .map((e) => TickerPrice.fromJson(e))
       .toList();
   }
 }
@@ -49,7 +49,7 @@ mixin TickerBookEndpoint on EndpointCaller {
 final class _Parameter {
   const _Parameter([ this.symbols ]);
 
-  /// If null, bookTickers for all symbols will be returned in an array.
+  /// If null, prices for all symbols will be returned in an array.
   final List<String>? symbols;
 
   Map<String, dynamic> toQueries() => {
@@ -60,25 +60,16 @@ final class _Parameter {
   };
 }
 
-final class TickerBook {
-  TickerBook.fromJson(Map<String, dynamic> json)
+final class TickerPrice {
+  TickerPrice.fromJson(Map<String, dynamic> json)
   : symbol = json['symbol'],
-    bidPrice = double.parse(json['bidPrice']),
-    bidQty = double.parse(json['bidQty']),
-    askPrice = double.parse(json['askPrice']),
-    askQty = double.parse(json['askQty']);
+    price = double.parse(json['price']);
 
   final String symbol;
-  final double bidPrice;
-  final double bidQty;
-  final double askPrice;
-  final double askQty;
+  final double price;
 
   Map<String, dynamic> toJson() => {
     'symbol': symbol,
-    'bidPrice': '$bidPrice',
-    'bidQty': '$bidQty',
-    'askPrice': '$askPrice',
-    'askQty': '$askQty',
+    'bidPrice': '$price',
   };
 }

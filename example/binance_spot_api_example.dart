@@ -6,7 +6,7 @@ import 'package:binance_spot_api/binance_spot_api.dart';
 
 Future<void> main() async {
   final client = MarketDataOnly();
-  final a = await client.tickerBook(['BTCUSDT', 'DYDXUSDT']);
+  final a = await client.tickerPrice(['BTCUSDT', 'DYDXUSDT']);
   for (final b in a) {
     print(b.toJson());
   }
