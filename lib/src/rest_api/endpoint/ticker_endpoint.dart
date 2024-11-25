@@ -71,7 +71,7 @@ final class _Parameter {
   })
   : assert(symbols.isNotEmpty, 'Symbols must be provided.'),
     assert(
-      symbols.length > 100,
+      symbols.length <= 100,
       'Maximum number of symbols allowed in a request is 100',
     ),
     assert(() {

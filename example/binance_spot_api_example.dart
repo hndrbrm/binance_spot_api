@@ -8,10 +8,8 @@ import 'package:binance_spot_api/binance_spot_api.dart';
 
 Future<void> main() async {
   final client = MarketDataOnly();
-  final a = await client.ticker(
-    symbols: ['BTCUSDT', 'DYDXUSDT'],
+  final a = await client.trades(
+    symbol: 'BTCUSDT',
   );
-  for (var b in a) {
-    print(b.serialize());
-  }
+  print(a.first.serialize());
 }
