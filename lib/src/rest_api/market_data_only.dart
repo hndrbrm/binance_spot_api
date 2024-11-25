@@ -4,15 +4,15 @@
 
 import 'endpoint/aggregate_trades_endpoint.dart';
 import 'endpoint/average_price_endpoint.dart';
-import 'endpoint/exchange_info.dart';
+import 'endpoint/exchange_info_endpoint.dart';
 import 'endpoint/klines_endpoint.dart';
 import 'endpoint/order_book_endpoint.dart';
 import 'endpoint/server_time_endpoint.dart';
 import 'endpoint/test_connectivity_endpoint.dart';
 import 'endpoint/ticker_endpoint.dart';
-import 'endpoint/ticker_24h.dart';
-import 'endpoint/ticker_book.dart';
-import 'endpoint/ticker_price.dart';
+import 'endpoint/ticker_24h_endpoint.dart';
+import 'endpoint/ticker_book_endpoint.dart';
+import 'endpoint/ticker_price_endpoint.dart';
 import 'endpoint/trades_endpoint.dart';
 import 'endpoint/ui_klines_endpoint.dart';
 import 'endpoint_caller.dart';
