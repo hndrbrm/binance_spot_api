@@ -5,6 +5,7 @@
 import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
+import '../interval.dart';
 
 /// Kline/candlestick bars for a symbol. Klines are uniquely identified by
 /// their open time.
@@ -17,17 +18,15 @@ mixin KlinesEndpoint on EndpointCaller {
   static const method = HttpMethod.get;
   static const weight = 2;
 
-  /// If [fromId], [startTime], and [endTime] are not sent, the most recent
-  /// aggregate trades will be returned.
-  Future<List<Candlestick>> candlestick({
+  Future<List<Kline>> klines({
     required String symbol,
-    required CandlestickInterval interval,
+    required KlineInterval interval,
     int? startTime,
     int? endTime,
     String? timeZone,
     int? limit,
   }) async {
-    final queries = _Parameter(
+    final queries = KlineParameter(
       symbol: symbol,
       interval: interval,
       startTime: startTime,
@@ -42,23 +41,27 @@ mixin KlinesEndpoint on EndpointCaller {
     ) as List<dynamic>;
 
     return json
-      .map((e) => Candlestick.fromJson(e))
+      .map((e) => Kline.deserialize(e))
       .toList();
   }
 }
 
-final class _Parameter {
-  const _Parameter({
+final class KlineParameter {
+  const KlineParameter({
     required this.symbol,
     required this.interval,
     this.startTime,
     this.endTime,
     this.timeZone,
     this.limit,
-  });
+  })
+  : assert(
+    limit == null || limit <= 1000,
+    'Limit value are too high. Maximum limit value are 1000.',
+  );
 
   final String symbol;
-  final CandlestickInterval interval;
+  final KlineInterval interval;
 
   /// If [startTime] and [endTime] are not sent, the most recent klines are
   /// returned.
@@ -73,15 +76,18 @@ final class _Parameter {
   /// * Only hours (e.g. 0, 8, 4)
   /// * Accepted range is strictly [-12:00 to +14:00] inclusive
   ///
+  /// If [timeZone] provided, [interval] are interpreted in that [timeZone]
+  /// instead of UTC.
+  ///
   /// Default: 0 (UTC)
   final String? timeZone;
 
-  /// Default 500; max 1000.
+  /// If null, will default to 500.
   final int? limit;
 
   Map<String, dynamic> toQueries() => {
     'symbol': symbol,
-    'interval': interval.toLetter(),
+    'interval': interval.serialize(),
     if (startTime != null)
     'startTime': startTime,
     if (endTime != null)
@@ -93,20 +99,20 @@ final class _Parameter {
   };
 }
 
-final class Candlestick {
-  Candlestick.fromJson(List<dynamic> json)
-  : openTime = json[0],
-    openPrice = double.parse(json[1]),
-    highPrice = double.parse(json[2]),
-    lowPrice = double.parse(json[3]),
-    closePrice = double.parse(json[4]),
-    volume = double.parse(json[5]),
-    closeTime = json[6],
-    quoteVolume = double.parse(json[7]),
-    numberOfTrade = json[8],
-    buyBaseVolume = double.parse(json[9]),
-    buyQuoteVolume = double.parse(json[10]),
-    unused = json[11];
+final class Kline {
+  Kline.deserialize(List<dynamic> list)
+  : openTime = list[0],
+    openPrice = double.parse(list[1]),
+    highPrice = double.parse(list[2]),
+    lowPrice = double.parse(list[3]),
+    closePrice = double.parse(list[4]),
+    volume = double.parse(list[5]),
+    closeTime = list[6],
+    quoteVolume = double.parse(list[7]),
+    numberOfTrade = list[8],
+    buyBaseVolume = double.parse(list[9]),
+    buyQuoteVolume = double.parse(list[10]),
+    unused = list[11];
 
   final int openTime;
   final double openPrice;
@@ -121,7 +127,7 @@ final class Candlestick {
   final double buyQuoteVolume;
   final String unused;
 
-  List<dynamic> toJson() => [
+  List<dynamic> serialize() => [
     openTime,
     '$openPrice',
     '$highPrice',
@@ -137,31 +143,59 @@ final class Candlestick {
   ];
 }
 
-enum CandlestickInterval {
-  second,
-  minute, minute3, minute5, minute15, minute30,
-  hour, hour2, hour4, hour6, hour8, hour12,
-  day, day3,
-  week,
-  month;
+enum KlineInterval {
+  oneSecond,
+  oneMinute, threeMinute, fiveMinute, fifteenMinute, thirtyMinute,
+  oneHour, twoHour, fourHour, sixHour, eightHour, twelveHour,
+  oneDay, threeDay,
+  oneWeek,
+  oneMonth;
 
-  String toLetter() =>
-    switch (this) {
-      second => '1s',
-      minute => '1m',
-      minute3 => '3m',
-      minute5 => '5m',
-      minute15 => '15m',
-      minute30 => '30m',
-      hour => '1h',
-      hour2 => '2h',
-      hour4 => '4h',
-      hour6 => '6h',
-      hour8 => '8h',
-      hour12 => '12h',
-      day => '1d',
-      day3 => '3d',
-      week => '1w',
-      month => '1M',
+  factory KlineInterval.deserialize(String string) =>
+    KlineInterval.fromInterval(
+      Interval.deserialize(string),
+    );
+
+  factory KlineInterval.fromInterval(Interval interval) =>
+    switch (interval) {
+      Interval.oneSecond => oneSecond,
+      Interval.oneMinute => oneMinute,
+      Interval.threeMinute => threeMinute,
+      Interval.fiveMinute => fiveMinute,
+      Interval.fifteenMinute => fifteenMinute,
+      Interval.thirtyMinute => thirtyMinute,
+      Interval.oneHour => oneHour,
+      Interval.twoHour => twoHour,
+      Interval.fourHour => fourHour,
+      Interval.sixHour => sixHour,
+      Interval.eightHour => eightHour,
+      Interval.twelveHour => twelveHour,
+      Interval.oneDay => oneDay,
+      Interval.threeDay => threeDay,
+      Interval.oneWeek => oneWeek,
+      Interval.oneMonth => oneMonth,
+      _ => throw UnimplementedError(interval.serialize()),
     };
+
+  Interval toInterval() =>
+    switch (this) {
+      oneSecond => Interval.oneSecond,
+      oneMinute => Interval.oneMinute,
+      threeMinute => Interval.threeMinute,
+      fiveMinute => Interval.fiveMinute,
+      fifteenMinute => Interval.fifteenMinute,
+      thirtyMinute => Interval.thirtyMinute,
+      oneHour => Interval.oneHour,
+      twoHour => Interval.twoHour,
+      fourHour => Interval.fourHour,
+      sixHour => Interval.sixHour,
+      eightHour => Interval.eightHour,
+      twelveHour => Interval.twelveHour,
+      oneDay => Interval.oneDay,
+      threeDay => Interval.threeDay,
+      oneWeek => Interval.oneWeek,
+      oneMonth => Interval.oneMonth,
+    };
+
+  String serialize() => toInterval().serialize();
 }
