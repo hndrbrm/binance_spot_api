@@ -9,6 +9,7 @@ import 'endpoint/klines_endpoint.dart';
 import 'endpoint/order_book_endpoint.dart';
 import 'endpoint/server_time_endpoint.dart';
 import 'endpoint/test_connectivity_endpoint.dart';
+import 'endpoint/ticker.dart';
 import 'endpoint/ticker_24h.dart';
 import 'endpoint/ticker_book.dart';
 import 'endpoint/ticker_price.dart';
@@ -21,7 +22,7 @@ final class MarketDataOnly with
   AggregateTradesEndpoint, AveragePriceEndpoint, ExchangeInfoEndpoint,
   KlinesEndpoint, OrderBookEndpoint, ServerTimeEndpoint,
   TestConnectivityEndpoint, Ticker24hEndpoint, TickerBookEndpoint,
-  TickerPriceEndpoint
+  TickerEndpoint, TickerPriceEndpoint
 {
   @override
   String get base => 'data-api.binance.vision';

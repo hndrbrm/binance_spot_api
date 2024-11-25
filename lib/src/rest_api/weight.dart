@@ -12,7 +12,7 @@ final class Weight {
 
   Weight.fromJson(Map<String, dynamic> json)
   : value = json['value'],
-    interval = Interval.fromLetter(json['interval']);
+    interval = Interval.deserialize(json['interval']);
 
   Weight.fromHeader(Map<String, dynamic> json)
   : this.fromJson(json.findUsedWeight());
@@ -21,7 +21,7 @@ final class Weight {
   final Interval interval;
 
   Map<String, dynamic> toJson() => {
-    'interval': interval.toLetter(),
+    'interval': interval.serialize(),
     'value': value,
   };
 }

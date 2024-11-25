@@ -3,17 +3,21 @@
 // by a BSD-style license that can be found in the LICENSE file.
 
 final class Interval {
-  Interval.fromLetter(String value)
-  : this._splitPosition(value, value.length - 1);
+  Interval.deserialize(String string)
+  : this._splitPosition(string, string.length - 1);
 
-  Interval._splitPosition(String value, int position)
-  : value = int.parse(value.substring(0, position)),
-    unit = IntervalUnit.fromLetter(value[position]);
+  Interval._splitPosition(String string, int position)
+  : value = int.parse(string.substring(0, position)),
+    unit = IntervalUnit.deserialize(string[position]);
 
-  int value;
-  IntervalUnit unit;
+  const Interval._(this.value, this.unit);
 
-  String toLetter() => '$value${unit.toLetter()}';
+  final int value;
+  final IntervalUnit unit;
+
+  static const Interval oneDay = Interval._(1, IntervalUnit.day);
+
+  String serialize() => '$value${unit.serialize()}';
 }
 
 enum IntervalUnit {
@@ -22,16 +26,16 @@ enum IntervalUnit {
   hour,
   day;
 
-  static IntervalUnit fromLetter(String letter) =>
-    switch (letter.toLowerCase()) {
+  static IntervalUnit deserialize(String string) =>
+    switch (string.toLowerCase()) {
       's' => second,
       'm' => minute,
       'h' => hour,
       'd' => day,
-      _ => throw UnimplementedError(letter),
+      _ => throw UnimplementedError(string),
     };
 
-  String toLetter() =>
+  String serialize() =>
     switch (this) {
       second => 's',
       minute => 'm',

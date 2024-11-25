@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import '../../enum/ticker_type.dart';
 import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
@@ -72,7 +73,7 @@ final class _Parameter {
     if (symbols != null && symbols!.length > 1)
     'symbols': jsonEncode(symbols),
     if (type != null)
-    'type': type!.toLetter(),
+    'type': type!.serialize(),
   };
 }
 
@@ -154,15 +155,4 @@ final class Ticker24h {
     'lastId': lastId,
     'count': count,
   };
-}
-
-enum TickerType {
-  mini,
-  full;
-
-  String toLetter() =>
-    switch (this) {
-      mini => 'MINI',
-      full => 'FULL',
-    };
 }
