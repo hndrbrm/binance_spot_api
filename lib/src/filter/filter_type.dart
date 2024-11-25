@@ -2,8 +2,8 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
-library;
+abstract class FilterType {
+  static const value = 'filterType';
 
-export 'src/error/error_exception.dart';
-export 'src/rest_api/endpoint/klines_endpoint.dart';
-export 'src/rest_api/market_data_only.dart';
+  String serialize();
+}

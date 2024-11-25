@@ -5,5 +5,20 @@
 enum RateLimitInterval {
   second,
   minute,
-  day,
+  day;
+
+  static RateLimitInterval deserialize(String string) =>
+    switch (string) {
+      'SECOND' => second,
+      'MINUTE' => minute,
+      'DAY' => day,
+      _ => throw UnimplementedError(string),
+    };
+
+  String serialize() =>
+    switch (this) {
+      second => 'SECOND',
+      minute => 'MINUTE',
+      day => 'DAY',
+    };
 }

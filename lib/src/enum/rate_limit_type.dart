@@ -2,7 +2,7 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
-enum RateLimiter {
+enum RateLimitType {
   /// Example:
   /// {
   ///   "rateLimitType": "REQUEST_WEIGHT",
@@ -28,5 +28,20 @@ enum RateLimiter {
   ///   "intervalNum": 5,
   ///   "limit": 61000
   /// }
-  rawRequest,
+  rawRequest;
+
+  static RateLimitType deserialize(String string) =>
+    switch (string) {
+      'REQUEST_WEIGHT' => requestWeight,
+      'ORDERS' => order,
+      'RAW_REQUESTS' => rawRequest,
+      _ => throw UnimplementedError(string)
+    };
+  
+  String serialize() =>
+    switch (this) {
+      requestWeight => 'REQUEST_WEIGHT',
+      order => 'ORDERS',
+      rawRequest => 'RAW_REQUESTS',
+    };
 }

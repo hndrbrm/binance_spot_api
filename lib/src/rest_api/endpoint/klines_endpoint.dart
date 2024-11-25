@@ -11,7 +11,7 @@ import '../http_method.dart';
 ///
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#klinecandlestick-data
-mixin CandlestickEndpoint on EndpointCaller {
+mixin KlinesEndpoint on EndpointCaller {
   static const dataSource = DataSource.database;
   static const endpoint = 'api/v3/klines';
   static const method = HttpMethod.get;
