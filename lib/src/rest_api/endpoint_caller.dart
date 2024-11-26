@@ -22,9 +22,13 @@ mixin EndpointCaller {
     final code = HttpReturnCode.parse(response.statusCode);
     if (code == HttpReturnCode.ok) {
       return response.body.decode();
-    } else {
+    }
+
+    try {
       final json = jsonDecode(response.body);
       throw ErrorException.deserialize(json);
+    } on FormatException {
+      throw Exception('Error (${response.statusCode}): ${code.name}\n\n${response.body}');
     }
   }
 }

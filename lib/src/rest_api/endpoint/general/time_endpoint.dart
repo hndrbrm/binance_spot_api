@@ -2,16 +2,16 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
-import '../data_source.dart';
-import '../endpoint_caller.dart';
-import '../http_method.dart';
-import '../serializer.dart';
+import '../../data_source.dart';
+import '../../endpoint_caller.dart';
+import '../../http_method.dart';
+import '../../serializer.dart';
 
 /// Test connectivity to the Rest API and get the current server time.
 ///
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#check-server-time
-mixin ServerTimeEndpoint on EndpointCaller {
+mixin TimeEndpoint on EndpointCaller {
   static const dataSource = DataSource.memory;
   static const endpoint = 'api/v3/time';
   static const method = HttpMethod.get;

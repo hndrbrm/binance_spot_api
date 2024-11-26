@@ -5,13 +5,13 @@
 import 'dart:convert';
 import 'dart:math';
 
-import '../../enum/ticker_type.dart';
-import '../data_source.dart';
-import '../endpoint_caller.dart';
-import '../http_method.dart';
-import '../interval.dart';
-import '../query_builder.dart';
-import '../serializer.dart';
+import '../../../enum/ticker_type.dart';
+import '../../data_source.dart';
+import '../../endpoint_caller.dart';
+import '../../http_method.dart';
+import '../../interval.dart';
+import '../../query_builder.dart';
+import '../../serializer.dart';
 
 /// Rolling window price change statistics.
 ///

@@ -2,15 +2,17 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
-import '../data_source.dart';
-import '../endpoint_caller.dart';
-import '../http_method.dart';
-import '../query_builder.dart';
-import '../serializer.dart';
+import '../../data_source.dart';
+import '../../endpoint_caller.dart';
+import '../../http_method.dart';
+import '../../query_builder.dart';
+import '../../serializer.dart';
 
+/// Order book.
+/// 
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#order-book
-mixin OrderBookEndpoint on EndpointCaller {
+mixin DepthEndpoint on EndpointCaller {
   static const dataSource = DataSource.memory;
   static const endpoint = 'api/v3/depth';
   static const method = HttpMethod.get;
@@ -25,7 +27,7 @@ mixin OrderBookEndpoint on EndpointCaller {
       _ => throw UnimplementedError('$limit'),
     };
 
-  Future<OrderBook> orderBook({
+  Future<OrderBook> depth({
     required String symbol,
     int? limit,
   }) async {

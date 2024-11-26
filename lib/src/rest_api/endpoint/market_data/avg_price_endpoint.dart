@@ -2,23 +2,23 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
-import '../data_source.dart';
-import '../endpoint_caller.dart';
-import '../http_method.dart';
-import '../query_builder.dart';
-import '../serializer.dart';
+import '../../data_source.dart';
+import '../../endpoint_caller.dart';
+import '../../http_method.dart';
+import '../../query_builder.dart';
+import '../../serializer.dart';
 
 /// Current average price for a symbol.
 ///
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#current-average-price
-mixin AveragePriceEndpoint on EndpointCaller {
+mixin AvgPriceEndpoint on EndpointCaller {
   static const dataSource = DataSource.memory;
   static const endpoint = 'api/v3/avgPrice';
   static const method = HttpMethod.get;
   static const weight = 2;
 
-  Future<AveragePrice> averagePrice(String symbol) async {
+  Future<AveragePrice> avgPrice(String symbol) async {
     final queries = _Parameter(symbol).buildQuery();
 
     final json = await call(

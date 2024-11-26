@@ -4,12 +4,12 @@
 
 import 'dart:convert';
 
-import '../../enum/ticker_type.dart';
-import '../data_source.dart';
-import '../endpoint_caller.dart';
-import '../http_method.dart';
-import '../query_builder.dart';
-import '../serializer.dart';
+import '../../../enum/ticker_type.dart';
+import '../../data_source.dart';
+import '../../endpoint_caller.dart';
+import '../../http_method.dart';
+import '../../query_builder.dart';
+import '../../serializer.dart';
 
 /// 24 hour rolling window price change statistics.
 ///

@@ -7,6 +7,8 @@ import 'network_issue.dart';
 import 'other_issue.dart';
 import 'request_issue.dart';
 
+/// Any endpoint can return an ERROR.
+///
 /// Errors consist of two parts: an error code and a message.
 /// Codes are universal, but messages can vary.
 ///

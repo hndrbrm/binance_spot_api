@@ -2,12 +2,12 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
-import '../data_source.dart';
-import '../endpoint_caller.dart';
-import '../http_method.dart';
-import '../interval.dart';
-import '../query_builder.dart';
-import '../serializer.dart';
+import '../../data_source.dart';
+import '../../endpoint_caller.dart';
+import '../../http_method.dart';
+import '../../interval.dart';
+import '../../query_builder.dart';
+import '../../serializer.dart';
 
 /// Kline/candlestick bars for a symbol.
 ///

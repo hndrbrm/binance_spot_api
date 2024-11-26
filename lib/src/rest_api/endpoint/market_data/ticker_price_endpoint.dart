@@ -4,11 +4,11 @@
 
 import 'dart:convert';
 
-import '../data_source.dart';
-import '../endpoint_caller.dart';
-import '../http_method.dart';
-import '../query_builder.dart';
-import '../serializer.dart';
+import '../../data_source.dart';
+import '../../endpoint_caller.dart';
+import '../../http_method.dart';
+import '../../query_builder.dart';
+import '../../serializer.dart';
 
 /// Latest price for a symbol or symbols.
 ///

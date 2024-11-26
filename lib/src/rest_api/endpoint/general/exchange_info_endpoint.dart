@@ -4,16 +4,16 @@
 
 import 'dart:convert';
 
-import '../../enum/permission.dart';
-import '../../enum/rate_limit_interval.dart';
-import '../../enum/rate_limit_type.dart';
-import '../../filter/exchange_filter.dart';
-import '../../filter/filter.dart';
-import '../data_source.dart';
-import '../endpoint_caller.dart';
-import '../http_method.dart';
-import '../query_builder.dart';
-import '../serializer.dart';
+import '../../../enum/permission.dart';
+import '../../../enum/rate_limit_interval.dart';
+import '../../../enum/rate_limit_type.dart';
+import '../../../filter/exchange_filter.dart';
+import '../../../filter/filter.dart';
+import '../../data_source.dart';
+import '../../endpoint_caller.dart';
+import '../../http_method.dart';
+import '../../query_builder.dart';
+import '../../serializer.dart';
 
 /// Current exchange trading rules and symbol information
 ///

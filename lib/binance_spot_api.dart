@@ -5,5 +5,5 @@
 library;
 
 export 'src/error/error_exception.dart';
-export 'src/rest_api/endpoint/klines_endpoint.dart';
+export 'src/rest_api/endpoint/market_data/klines_endpoint.dart';
 export 'src/rest_api/market_data_only.dart';

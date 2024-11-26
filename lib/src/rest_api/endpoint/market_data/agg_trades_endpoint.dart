@@ -2,11 +2,11 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
-import '../data_source.dart';
-import '../endpoint_caller.dart';
-import '../http_method.dart';
-import '../query_builder.dart';
-import '../serializer.dart';
+import '../../data_source.dart';
+import '../../endpoint_caller.dart';
+import '../../http_method.dart';
+import '../../query_builder.dart';
+import '../../serializer.dart';
 
 /// Get compressed, aggregate trades.
 ///
@@ -15,13 +15,13 @@ import '../serializer.dart';
 ///
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#compressedaggregate-trades-list
-mixin AggregateTradesEndpoint on EndpointCaller {
+mixin AggTradesEndpoint on EndpointCaller {
   static const dataSource = DataSource.database;
   static const endpoint = 'api/v3/aggTrades';
   static const method = HttpMethod.get;
   static const weight = 2;
 
-  Future<List<AggregateTrade>> aggregateTrades({
+  Future<List<AggregateTrade>> aggTrades({
     required String symbol,
     int? fromId,
     int? startTime,

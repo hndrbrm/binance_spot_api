@@ -2,9 +2,9 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
-import '../data_source.dart';
-import '../endpoint_caller.dart';
-import '../http_method.dart';
+import '../../data_source.dart';
+import '../../endpoint_caller.dart';
+import '../../http_method.dart';
 import 'klines_endpoint.dart';
 
 /// The request is similar to [KlinesEndpoint] having the same parameters

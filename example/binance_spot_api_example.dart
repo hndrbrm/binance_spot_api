@@ -6,9 +6,9 @@ import 'package:binance_spot_api/binance_spot_api.dart';
 
 Future<void> main() async {
   final client = MarketDataOnly();
-  final a = await client.uiKlines(
-    symbol: 'BTCUSDT',
-    interval: KlineInterval.fifteenMinute,
+  // final a = await client.historicalTrades(
+  final a = await client.depth(
+    symbol: 'BTCAUSE',
   );
-  print(a.first.serialize());
+  print(a.serialize());
 }
