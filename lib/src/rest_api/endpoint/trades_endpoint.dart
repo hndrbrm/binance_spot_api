@@ -6,6 +6,7 @@ import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
 import '../query_builder.dart';
+import '../serializer.dart';
 
 /// Get recent trades.
 ///
@@ -61,7 +62,7 @@ final class _Parameter implements QueryBuilder {
   };
 }
 
-final class Trade {
+final class Trade implements Serializer {
   Trade.deserialize(Map<String, dynamic> map)
   : id = map[_id],
     price = double.parse(map[_price]),
@@ -87,6 +88,7 @@ final class Trade {
   static const _isBuyerMaker = 'isBuyerMaker';
   static const _isBestMatch = 'isBestMatch';
 
+  @override
   Map<String, dynamic> serialize() => {
     _id: id,
     _price: '$price',

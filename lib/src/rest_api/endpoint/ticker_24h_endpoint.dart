@@ -9,6 +9,7 @@ import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
 import '../query_builder.dart';
+import '../serializer.dart';
 
 /// 24 hour rolling window price change statistics. Careful when accessing
 /// this with no symbol.
@@ -45,13 +46,13 @@ mixin Ticker24hEndpoint on EndpointCaller {
 
     if (json is Map) {
       return [
-        Ticker24h.fromJson(json as Map<String, dynamic>)
+        Ticker24h.deserialize(json as Map<String, dynamic>)
       ];
     }
 
     return (json as List<dynamic>)
       .map((e) => e as Map<String, dynamic>)
-      .map((e) => Ticker24h.fromJson(e))
+      .map((e) => Ticker24h.deserialize(e))
       .toList();
   }
 }
@@ -79,29 +80,29 @@ final class _Parameter implements QueryBuilder {
   };
 }
 
-final class Ticker24h {
-  Ticker24h.fromJson(Map<String, dynamic> json)
-  : symbol = json['symbol'],
-    priceChange = double.tryParse(json['priceChange']),
-    priceChangePercent = double.tryParse(json['priceChangePercent']),
-    weightedAvgPrice = double.tryParse(json['weightedAvgPrice']),
-    prevClosePrice = double.tryParse(json['prevClosePrice']),
-    lastPrice = double.parse(json['lastPrice']),
-    lastQty = double.tryParse(json['lastQty']),
-    bidPrice = double.tryParse(json['bidPrice']),
-    bidQty = double.tryParse(json['bidQty']),
-    askPrice = double.tryParse(json['askPrice']),
-    askQty = double.tryParse(json['askQty']),
-    openPrice = double.parse(json['openPrice']),
-    highPrice = double.parse(json['highPrice']),
-    lowPrice = double.parse(json['lowPrice']),
-    volume = double.parse(json['volume']),
-    quoteVolume = double.parse(json['quoteVolume']),
-    openTime = json['openTime'],
-    closeTime = json['closeTime'],
-    firstId = json['firstId'],
-    lastId = json['lastId'],
-    count = json['count'];
+final class Ticker24h implements Serializer {
+  Ticker24h.deserialize(Map<String, dynamic> map)
+  : symbol = map[_symbol],
+    priceChange = double.tryParse(map[_priceChange]),
+    priceChangePercent = double.tryParse(map[_priceChangePercent]),
+    weightedAvgPrice = double.tryParse(map[_weightedAvgPrice]),
+    prevClosePrice = double.tryParse(map[_prevClosePrice]),
+    lastPrice = double.parse(map[_lastPrice]),
+    lastQty = double.tryParse(map[_lastQty]),
+    bidPrice = double.tryParse(map[_bidPrice]),
+    bidQty = double.tryParse(map[_bidQty]),
+    askPrice = double.tryParse(map[_askPrice]),
+    askQty = double.tryParse(map[_askQty]),
+    openPrice = double.parse(map[_openPrice]),
+    highPrice = double.parse(map[_highPrice]),
+    lowPrice = double.parse(map[_lowPrice]),
+    volume = double.parse(map[_volume]),
+    quoteVolume = double.parse(map[_quoteVolume]),
+    openTime = map[_openTime],
+    closeTime = map[_closeTime],
+    firstId = map[_firstId],
+    lastId = map[_lastId],
+    count = map[_count];
 
   final String symbol;
   final double? priceChange;
@@ -124,37 +125,60 @@ final class Ticker24h {
   final int firstId;
   final int lastId;
   final int count;
-
-  Map<String, dynamic> toJson() => {
-    'symbol': symbol,
+  
+  static const _symbol = 'symbol';
+  static const _priceChange = 'priceChange';
+  static const _priceChangePercent = 'priceChangePercent';
+  static const _weightedAvgPrice = 'weightedAvgPrice';
+  static const _prevClosePrice = 'prevClosePrice';
+  static const _lastPrice = 'lastPrice';
+  static const _lastQty = 'lastQty';
+  static const _bidPrice = 'bidPrice';
+  static const _bidQty = 'bidQty';
+  static const _askPrice = 'askPrice';
+  static const _askQty = 'askQty';
+  static const _openPrice = 'openPrice';
+  static const _highPrice = 'highPrice';
+  static const _lowPrice = 'lowPrice';
+  static const _volume = 'volume';
+  static const _quoteVolume = 'quoteVolume';
+  static const _openTime = 'openTime';
+  static const _closeTime = 'closeTime';
+  static const _firstId = 'firstId';
+  static const _lastId = 'lastId';
+  static const _count = 'askQty';
+  
+  @override
+  Map<String, dynamic> serialize() => {
+    _symbol: symbol,
     if (priceChange != null)
-    'priceChange': '$priceChange',
+    _priceChange: '$priceChange',
     if (priceChangePercent != null)
-    'priceChangePercent': '$priceChangePercent',
+    _priceChangePercent: '$priceChangePercent',
     if (weightedAvgPrice != null)
-    'weightedAvgPrice': '$weightedAvgPrice',
+    _weightedAvgPrice: '$weightedAvgPrice',
     if (prevClosePrice != null)
-    'prevClosePrice': '$prevClosePrice',
-    'lastPrice': '$lastPrice',
+    _prevClosePrice: '$prevClosePrice',
+    _lastPrice: '$lastPrice',
     if (lastQty != null)
-    'lastQty': '$lastQty',
+    _lastQty: '$lastQty',
     if (bidPrice != null)
-    'bidPrice': '$bidPrice',
+    _bidPrice: '$bidPrice',
     if (bidQty != null)
-    'bidQty': '$bidQty',
+    _bidQty: '$bidQty',
     if (askPrice != null)
-    'askPrice': '$askPrice',
+    _askPrice: '$askPrice',
     if (askQty != null)
-    'askQty': '$askQty',
-    'openPrice': '$openPrice',
-    'highPrice': '$highPrice',
-    'lowPrice': '$lowPrice',
-    'volume': '$volume',
-    'quoteVolume': '$quoteVolume',
-    'openTime': openTime,
-    'closeTime': closeTime,
-    'firstId': firstId,
-    'lastId': lastId,
-    'count': count,
+    _askQty: '$askQty',
+    _openPrice: '$openPrice',
+    _highPrice: '$highPrice',
+    _lowPrice: '$lowPrice',
+    _volume: '$volume',
+    _quoteVolume: '$quoteVolume',
+    _openTime: openTime,
+    _closeTime: closeTime,
+    _firstId: firstId,
+    _lastId: lastId,
+    _count: count,
   };
 }

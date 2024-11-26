@@ -2,6 +2,7 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
+import '../rest_api/serializer.dart';
 import 'network_issue.dart';
 import 'other_issue.dart';
 import 'request_issue.dart';
@@ -17,15 +18,16 @@ import 'request_issue.dart';
 ///
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/errors.md
-final class ErrorException implements Exception {
-  ErrorException.fromJson(Map<String, dynamic> json)
-  : code = ErrorCode.parse(json['code']),
-    message = json['msg'];
+final class ErrorException implements Exception, Serializer {
+  ErrorException.deserialize(Map<String, dynamic> map)
+  : code = ErrorCode.parse(map['code']),
+    message = map['msg'];
 
   final ErrorCode code;
   final String message;
 
-  Map<String, dynamic> toJson() => {
+  @override
+  Map<String, dynamic> serialize() => {
     'code': code.value,
     'msg': message,
   };

@@ -3,24 +3,26 @@
 // by a BSD-style license that can be found in the LICENSE file.
 
 import 'interval.dart';
+import 'serializer.dart';
 
-final class Weight {
+final class Weight implements Serializer {
   const Weight({
     required this.value,
     required this.interval,
   });
 
-  Weight.fromJson(Map<String, dynamic> json)
-  : value = json['value'],
-    interval = Interval.deserialize(json['interval']);
+  Weight.deserialize(Map<String, dynamic> map)
+  : value = map['value'],
+    interval = Interval.deserialize(map['interval']);
 
-  Weight.fromHeader(Map<String, dynamic> json)
-  : this.fromJson(json.findUsedWeight());
+  Weight.fromHeader(Map<String, dynamic> header)
+  : this.deserialize(header.findUsedWeight());
 
   final int value;
   final Interval interval;
 
-  Map<String, dynamic> toJson() => {
+  @override
+  Map<String, dynamic> serialize() => {
     'interval': interval.serialize(),
     'value': value,
   };

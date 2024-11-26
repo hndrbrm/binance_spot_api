@@ -24,7 +24,7 @@ mixin EndpointCaller {
       return response.body.decode();
     } else {
       final json = jsonDecode(response.body);
-      throw ErrorException.fromJson(json);
+      throw ErrorException.deserialize(json);
     }
   }
 }

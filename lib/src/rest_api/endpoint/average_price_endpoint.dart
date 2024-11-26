@@ -6,6 +6,7 @@ import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
 import '../query_builder.dart';
+import '../serializer.dart';
 
 /// Current average price for a symbol.
 ///
@@ -25,7 +26,7 @@ mixin AveragePriceEndpoint on EndpointCaller {
       queries: queries,
     ) as Map<String, dynamic>;
 
-    return AveragePrice.fromJson(json);
+    return AveragePrice.deserialize(json);
   }
 }
 
@@ -40,11 +41,11 @@ final class _Parameter implements QueryBuilder {
   };
 }
 
-final class AveragePrice {
-  AveragePrice.fromJson(Map<String, dynamic> json)
-  : interval = json['mins'],
-    price = double.parse(json['price']),
-    closeTime = json['closeTime'];
+final class AveragePrice implements Serializer {
+  AveragePrice.deserialize(Map<String, dynamic> json)
+  : interval = json[_interval],
+    price = double.parse(json[_price]),
+    closeTime = json[_closeTime];
 
   /// Average price interval (in minutes)
   final int interval;
@@ -55,9 +56,14 @@ final class AveragePrice {
   /// Last trade time
   final int closeTime;
 
-  Map<String, dynamic> toJson() => {
-    'mins': interval,
-    'price': '$price',
-    'closeTime': closeTime,
+  static const _interval = 'mins';
+  static const _price = 'price';
+  static const _closeTime = 'closeTime';
+
+  @override
+  Map<String, dynamic> serialize() => {
+    _interval: interval,
+    _price: '$price',
+    _closeTime: closeTime,
   };
 }

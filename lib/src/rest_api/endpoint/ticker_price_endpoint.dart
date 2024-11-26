@@ -8,6 +8,7 @@ import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
 import '../query_builder.dart';
+import '../serializer.dart';
 
 /// Latest price for a symbol or symbols.
 ///
@@ -36,13 +37,13 @@ mixin TickerPriceEndpoint on EndpointCaller {
 
     if (json is Map) {
       return [
-        TickerPrice.fromJson(json as Map<String, dynamic>)
+        TickerPrice.deserialize(json as Map<String, dynamic>)
       ];
     }
 
     return (json as List<dynamic>)
       .map((e) => e as Map<String, dynamic>)
-      .map((e) => TickerPrice.fromJson(e))
+      .map((e) => TickerPrice.deserialize(e))
       .toList();
   }
 }
@@ -62,16 +63,20 @@ final class _Parameter implements QueryBuilder {
   };
 }
 
-final class TickerPrice {
-  TickerPrice.fromJson(Map<String, dynamic> json)
-  : symbol = json['symbol'],
-    price = double.parse(json['price']);
+final class TickerPrice implements Serializer {
+  TickerPrice.deserialize(Map<String, dynamic> map)
+  : symbol = map[_symbol],
+    price = double.parse(map[_price]);
 
   final String symbol;
   final double price;
 
-  Map<String, dynamic> toJson() => {
-    'symbol': symbol,
-    'bidPrice': '$price',
+  static const _symbol = 'symbol';
+  static const _price = 'price';
+
+  @override
+  Map<String, dynamic> serialize() => {
+    _symbol: symbol,
+    _price: '$price',
   };
 }

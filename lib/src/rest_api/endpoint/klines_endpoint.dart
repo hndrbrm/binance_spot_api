@@ -7,6 +7,7 @@ import '../endpoint_caller.dart';
 import '../http_method.dart';
 import '../interval.dart';
 import '../query_builder.dart';
+import '../serializer.dart';
 
 /// Kline/candlestick bars for a symbol. Klines are uniquely identified by
 /// their open time.
@@ -101,7 +102,7 @@ final class KlineParameter implements QueryBuilder {
   };
 }
 
-final class Kline {
+final class Kline implements Serializer {
   Kline.deserialize(List<dynamic> list)
   : openTime = list[0],
     openPrice = double.parse(list[1]),
@@ -129,6 +130,7 @@ final class Kline {
   final double buyQuoteVolume;
   final String unused;
 
+  @override
   List<dynamic> serialize() => [
     openTime,
     '$openPrice',
@@ -145,7 +147,7 @@ final class Kline {
   ];
 }
 
-enum KlineInterval {
+enum KlineInterval implements Serializer {
   oneSecond,
   oneMinute, threeMinute, fiveMinute, fifteenMinute, thirtyMinute,
   oneHour, twoHour, fourHour, sixHour, eightHour, twelveHour,
@@ -154,11 +156,11 @@ enum KlineInterval {
   oneMonth;
 
   factory KlineInterval.deserialize(String string) =>
-    KlineInterval.fromInterval(
+    KlineInterval._fromInterval(
       Interval.deserialize(string),
     );
 
-  factory KlineInterval.fromInterval(Interval interval) =>
+  factory KlineInterval._fromInterval(Interval interval) =>
     switch (interval) {
       Interval.oneSecond => oneSecond,
       Interval.oneMinute => oneMinute,
@@ -179,7 +181,10 @@ enum KlineInterval {
       _ => throw UnimplementedError(interval.serialize()),
     };
 
-  Interval toInterval() =>
+  @override
+  String serialize() => _toInterval().serialize();
+
+  Interval _toInterval() =>
     switch (this) {
       oneSecond => Interval.oneSecond,
       oneMinute => Interval.oneMinute,
@@ -198,6 +203,4 @@ enum KlineInterval {
       oneWeek => Interval.oneWeek,
       oneMonth => Interval.oneMonth,
     };
-
-  String serialize() => toInterval().serialize();
 }

@@ -6,6 +6,7 @@ import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
 import '../query_builder.dart';
+import '../serializer.dart';
 
 /// Get compressed, aggregate trades.
 ///
@@ -20,8 +21,6 @@ mixin AggregateTradesEndpoint on EndpointCaller {
   static const method = HttpMethod.get;
   static const weight = 2;
 
-  /// If [fromId], [startTime], and [endTime] are not sent, the most recent
-  /// aggregate trades will be returned.
   Future<List<AggregateTrade>> aggregateTrades({
     required String symbol,
     int? fromId,
@@ -43,11 +42,13 @@ mixin AggregateTradesEndpoint on EndpointCaller {
     ) as List<dynamic>;
 
     return json
-      .map((e) => AggregateTrade.fromJson(e))
+      .map((e) => AggregateTrade.deserialize(e))
       .toList();
   }
 }
 
+/// If [fromId], [startTime], and [endTime] are not sent, the most recent
+/// aggregate trades will be returned.
 final class _Parameter implements QueryBuilder {
   const _Parameter({
     required this.symbol,
@@ -55,7 +56,11 @@ final class _Parameter implements QueryBuilder {
     this.startTime,
     this.endTime,
     this.limit,
-  });
+  })
+  : assert(
+    limit == null || limit <= 1000,
+    'Limit are too high. Maximum limit is 1000.',
+  );
 
   final String symbol;
 
@@ -68,7 +73,7 @@ final class _Parameter implements QueryBuilder {
   /// Timestamp in ms to get aggregate trades until INCLUSIVE.
   final int? endTime;
 
-  /// Default 500; max 1000.
+  /// If null, default to 500.
   final int? limit;
 
   @override
@@ -85,16 +90,16 @@ final class _Parameter implements QueryBuilder {
   };
 }
 
-final class AggregateTrade {
-  AggregateTrade.fromJson(Map<String, dynamic> json)
-  : tradeId = json['a'],
-    price = double.parse(json['p']),
-    quantity = double.parse(json['q']),
-    firstTradeId = json['f'],
-    lastTradeId = json['l'],
-    timestamp = json['T'],
-    isMaker = json['m'],
-    isBestPriceMatch = json['M'];
+final class AggregateTrade implements Serializer {
+  AggregateTrade.deserialize(Map<String, dynamic> map)
+  : tradeId = map[_tradeId],
+    price = double.parse(map[_price]),
+    quantity = double.parse(map[_quantity]),
+    firstTradeId = map[_firstTradeId],
+    lastTradeId = map[_lastTradeId],
+    timestamp = map[_timestamp],
+    isMaker = map[_isMaker],
+    isBestPriceMatch = map[_isBestPriceMatch];
 
   final int tradeId;
   final double price;
@@ -109,14 +114,24 @@ final class AggregateTrade {
   /// Was the trade the best price match?
   final bool isBestPriceMatch;
 
-  Map<String, dynamic> toJson() => {
-    'a': tradeId,
-    'p': '$price',
-    'q': '$quantity',
-    'f': firstTradeId,
-    'l': lastTradeId,
-    'T': timestamp,
-    'm': isMaker,
-    'M': isBestPriceMatch,
+  static const _tradeId = 'a';
+  static const _price = 'p';
+  static const _quantity = 'q';
+  static const _firstTradeId = 'f';
+  static const _lastTradeId = 'l';
+  static const _timestamp = 'T';
+  static const _isMaker = 'm';
+  static const _isBestPriceMatch = 'M';
+
+  @override
+  Map<String, dynamic> serialize() => {
+    _tradeId: tradeId,
+    _price: '$price',
+    _quantity: '$quantity',
+    _firstTradeId: firstTradeId,
+    _lastTradeId: lastTradeId,
+    _timestamp: timestamp,
+    _isMaker: isMaker,
+    _isBestPriceMatch: isBestPriceMatch,
   };
 }

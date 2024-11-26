@@ -6,6 +6,7 @@ import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
 import '../query_builder.dart';
+import '../serializer.dart';
 
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#order-book
@@ -38,7 +39,7 @@ mixin OrderBookEndpoint on EndpointCaller {
       queries: queries,
     ) as Map<String, dynamic>;
 
-    return OrderBook.fromJson(json);
+    return OrderBook.deserialize(json);
   }
 }
 
@@ -62,39 +63,44 @@ final class _Parameter implements QueryBuilder {
   };
 }
 
-final class OrderBook {
-  OrderBook.fromJson(Map<String, dynamic> json)
-  : lastUpdateId = json['lastUpdateId'],
-    bids = (json['bids'] as List<dynamic>)
+final class OrderBook implements Serializer {
+  OrderBook.deserialize(Map<String, dynamic> map)
+  : lastUpdateId = map[_lastUpdateId],
+    bids = (map[_bids] as List<dynamic>)
       .map((e) => e as List<dynamic>)
-      .map((e) => Position.fromJson(e))
+      .map((e) => Position.deserialize(e))
       .toList(),
-    asks = (json['asks'] as List<dynamic>)
+    asks = (map[_asks] as List<dynamic>)
       .map((e) => e as List<dynamic>)
-      .map((e) => Position.fromJson(e))
+      .map((e) => Position.deserialize(e))
       .toList();
 
   final int lastUpdateId;
-
   final List<Position> bids;
   final List<Position> asks;
 
-  Map<String, dynamic> toJson() => {
-    'lastUpdateId': lastUpdateId,
-    'bids': bids.map((e) => e.toJson()).toList(),
-    'closeTime': asks.map((e) => e.toJson()).toList(),
+  static const _lastUpdateId = 'lastUpdateId';
+  static const _bids = 'bids';
+  static const _asks = 'asks';
+
+  @override
+  Map<String, dynamic> serialize() => {
+    _lastUpdateId: lastUpdateId,
+    _bids: bids.map((e) => e.serialize()).toList(),
+    _asks: asks.map((e) => e.serialize()).toList(),
   };
 }
 
-final class Position {
-  Position.fromJson(List<dynamic> json)
-  : price = double.parse(json[0]),
-    quantity = double.parse(json[1]);
+final class Position implements Serializer {
+  Position.deserialize(List<dynamic> map)
+  : price = double.parse(map[0]),
+    quantity = double.parse(map[1]);
 
   final double price;
   final double quantity;
 
-  List<dynamic> toJson() => [
+  @override
+  List<dynamic> serialize() => [
     '$price',
     '$quantity',
   ];

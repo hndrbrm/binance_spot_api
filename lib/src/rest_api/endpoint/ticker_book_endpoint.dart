@@ -8,6 +8,7 @@ import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
 import '../query_builder.dart';
+import '../serializer.dart';
 
 /// Best price/qty on the order book for a symbol or symbols.
 ///
@@ -36,13 +37,13 @@ mixin TickerBookEndpoint on EndpointCaller {
 
     if (json is Map) {
       return [
-        TickerBook.fromJson(json as Map<String, dynamic>)
+        TickerBook.deserialize(json as Map<String, dynamic>)
       ];
     }
 
     return (json as List<dynamic>)
       .map((e) => e as Map<String, dynamic>)
-      .map((e) => TickerBook.fromJson(e))
+      .map((e) => TickerBook.deserialize(e))
       .toList();
   }
 }
@@ -62,13 +63,13 @@ final class _Parameter implements QueryBuilder {
   };
 }
 
-final class TickerBook {
-  TickerBook.fromJson(Map<String, dynamic> json)
-  : symbol = json['symbol'],
-    bidPrice = double.parse(json['bidPrice']),
-    bidQty = double.parse(json['bidQty']),
-    askPrice = double.parse(json['askPrice']),
-    askQty = double.parse(json['askQty']);
+final class TickerBook implements Serializer {
+  TickerBook.deserialize(Map<String, dynamic> map)
+  : symbol = map[_symbol],
+    bidPrice = double.parse(map[_bidPrice]),
+    bidQty = double.parse(map[_bidQty]),
+    askPrice = double.parse(map[_askPrice]),
+    askQty = double.parse(map[_askQty]);
 
   final String symbol;
   final double bidPrice;
@@ -76,11 +77,18 @@ final class TickerBook {
   final double askPrice;
   final double askQty;
 
-  Map<String, dynamic> toJson() => {
-    'symbol': symbol,
-    'bidPrice': '$bidPrice',
-    'bidQty': '$bidQty',
-    'askPrice': '$askPrice',
-    'askQty': '$askQty',
+  static const _symbol = 'symbol';
+  static const _bidPrice = 'bidPrice';
+  static const _bidQty = 'bidQty';
+  static const _askPrice = 'askPrice';
+  static const _askQty = 'askQty';
+
+  @override
+  Map<String, dynamic> serialize() => {
+    _symbol: symbol,
+    _bidPrice: '$bidPrice',
+    _bidQty: '$bidQty',
+    _askPrice: '$askPrice',
+    _askQty: '$askQty',
   };
 }

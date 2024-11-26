@@ -5,6 +5,7 @@
 import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
+import '../serializer.dart';
 
 /// Test connectivity to the Rest API and get the current server time.
 ///
@@ -19,17 +20,20 @@ mixin ServerTimeEndpoint on EndpointCaller {
   Future<ServerTime> serverTime() async {
     final json = await call(endpoint: endpoint) as Map<String, dynamic>;
 
-    return ServerTime.fromJson(json);
+    return ServerTime.deserialize(json);
   }
 }
 
-final class ServerTime {
-  ServerTime.fromJson(Map<String, dynamic> json)
-  : serverTime = json['serverTime'];
+final class ServerTime implements Serializer {
+  ServerTime.deserialize(Map<String, dynamic> map)
+  : serverTime = map[_serverTime];
 
   final int serverTime;
 
-  Map<String, dynamic> toJson() => {
-    'serverTime': serverTime,
+  static const _serverTime = 'serverTime';
+
+  @override
+  Map<String, dynamic> serialize() => {
+    _serverTime: serverTime,
   };
 }

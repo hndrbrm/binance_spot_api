@@ -13,6 +13,7 @@ import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
 import '../query_builder.dart';
+import '../serializer.dart';
 
 /// Current exchange trading rules and symbol information
 ///
@@ -94,21 +95,25 @@ final class _Parameter implements QueryBuilder {
   };
 }
 
-final class TickerPrice {
-  TickerPrice.fromJson(Map<String, dynamic> json)
-  : symbol = json['symbol'],
-    price = double.parse(json['price']);
+final class TickerPrice implements Serializer {
+  TickerPrice.deserialize(Map<String, dynamic> json)
+  : symbol = json[_symbol],
+    price = double.parse(json[_price]);
 
   final String symbol;
   final double price;
 
-  Map<String, dynamic> toJson() => {
-    'symbol': symbol,
-    'bidPrice': '$price',
+  static const _symbol = 'symbol';
+  static const _price = 'price';
+
+  @override
+  Map<String, dynamic> serialize() => {
+    _symbol: symbol,
+    _price: '$price',
   };
 }
 
-final class ExchangeInfo {
+final class ExchangeInfo implements Serializer {
   ExchangeInfo.deserialize(Map<String, dynamic> map)
   : timezone = map[_timezone],
     serverTime = map[_serverTime],
@@ -143,6 +148,7 @@ final class ExchangeInfo {
   static const _symbols = 'symbols';
   static const _sors = 'sors';
 
+  @override
   Map<String, dynamic> serialize() => {
     _timezone: timezone,
     _serverTime: serverTime,
@@ -154,27 +160,33 @@ final class ExchangeInfo {
   };
 }
 
-final class RateLimit {
+final class RateLimit implements Serializer {
   RateLimit.deserialize(Map<String, dynamic> map)
-  : type = RateLimitType.deserialize(map['rateLimitType']),
-    interval = RateLimitInterval.deserialize(map['interval']),
-    value = map['intervalNum'],
-    limit = map['limit'];
+  : type = RateLimitType.deserialize(map[_type]),
+    interval = RateLimitInterval.deserialize(map[_interval]),
+    value = map[_value],
+    limit = map[_limit];
 
   final RateLimitType type;
   final RateLimitInterval interval;
   final int value;
   final int limit;
 
+  static const _type = 'rateLimitType';
+  static const _interval = 'interval';
+  static const _value = 'intervalNum';
+  static const _limit = 'limit';
+
+  @override
   Map<String, dynamic> serialize() => {
-    'rateLimitType': type.serialize(),
-    'interval': interval.serialize(),
-    'intervalNum': value,
-    'limit': limit,
+    _type: type.serialize(),
+    _interval: interval.serialize(),
+    _value: value,
+    _limit: limit,
   };
 }
 
-final class Symbol {
+final class Symbol implements Serializer {
   Symbol.deserialize(Map<String, dynamic> map)
   : symbol = map[_symbol],
     status = SymbolStatus.deserialize(map[_status]),
@@ -264,6 +276,7 @@ final class Symbol {
   static const _defaultSelfTradePreventionMode = 'defaultSelfTradePreventionMode';
   static const _allowedSelfTradePreventionModes = 'allowedSelfTradePreventionModes';
 
+  @override
   Map<String, dynamic> serialize() => {
     _symbol: symbol,
     _status: status.serialize(),
@@ -293,7 +306,7 @@ final class Symbol {
   };
 }
 
-enum SymbolStatus {
+enum SymbolStatus implements Serializer {
   trading,
   halt,
   theBreak;
@@ -310,6 +323,7 @@ enum SymbolStatus {
   static const _halt = 'HALT';
   static const _break = 'BREAK';
 
+  @override
   String serialize() =>
     switch (this) {
       trading => _trading,
@@ -318,7 +332,7 @@ enum SymbolStatus {
     };
 }
 
-enum OrderType {
+enum OrderType implements Serializer {
   limit,
   limitMarker,
   market,
@@ -347,6 +361,7 @@ enum OrderType {
   static const _takeProfit = 'TAKE_PROFIT';
   static const _takeProfitLimit = 'TAKE_PROFIT_LIMIT';
 
+  @override
   String serialize() =>
     switch (this) {
       limit => _limit,
@@ -359,7 +374,7 @@ enum OrderType {
     };
 }
 
-final class Sor {
+final class Sor implements Serializer {
   Sor.deserialize(Map<String, dynamic> map)
   : baseAsset = map[_baseAsset],
     symbols = map[_symbols];
@@ -370,6 +385,7 @@ final class Sor {
   static const _baseAsset = 'baseAsset';
   static const _symbols = 'symbols';
 
+  @override
   Map<String, dynamic> serialize() => {
     _baseAsset: baseAsset,
     _symbols: symbols,

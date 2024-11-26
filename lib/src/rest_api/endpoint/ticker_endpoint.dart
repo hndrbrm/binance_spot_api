@@ -11,6 +11,7 @@ import '../endpoint_caller.dart';
 import '../http_method.dart';
 import '../interval.dart';
 import '../query_builder.dart';
+import '../serializer.dart';
 
 /// Rolling window price change statistics.
 ///
@@ -108,7 +109,7 @@ final class _Parameter implements QueryBuilder {
   };
 }
 
-final class Ticker {
+final class Ticker implements Serializer {
   Ticker.deserialize(Map<String, dynamic> map)
   : symbol = map[_symbol],
     priceChange = double.parse(map[_priceChange]),
@@ -158,6 +159,7 @@ final class Ticker {
   static const _lastId = 'lastId';
   static const _count = 'count';
 
+  @override
   Map<String, dynamic> serialize() => {
     _symbol: symbol,
     _priceChange: '$priceChange',
