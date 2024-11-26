@@ -63,18 +63,20 @@ final class _Parameter implements QueryBuilder {
   /// This cannot be used in combination with [symbols].
   ///
   /// If null, all symbols that have either [Permission.spot],
-  /// [Permission.margin], or [Permission.leveraged] permission will be exposed.
+  /// [Permission.margin], or [Permission.leveraged] will be exposed.
   ///
   /// Reference:
   /// https://github.com/binance/binance-spot-api-docs/blob/master/enums.md#account-and-symbol-permissions
   final List<Permission>? permissions;
 
   /// Controls whether the content of the permissionSets field is populated
-  /// or not. Defaults to true
+  /// or not.
+  ///
+  /// Defaults to true
   final bool? showPermissionSets;
 
-  /// Filters symbols that have this tradingStatus. Valid values:
-  /// [SymbolStatus.TRADING], [SymbolStatus.HALT], [SymbolStatus.BREAK]
+  /// Filters symbols that have this tradingStatus.
+  ///
   /// Cannot be used in combination with [symbols].
   final SymbolStatus? symbolStatus;
 

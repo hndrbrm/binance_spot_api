@@ -9,8 +9,9 @@ import '../interval.dart';
 import '../query_builder.dart';
 import '../serializer.dart';
 
-/// Kline/candlestick bars for a symbol. Klines are uniquely identified by
-/// their open time.
+/// Kline/candlestick bars for a symbol.
+///
+/// Klines are uniquely identified by their open time.
 ///
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#klinecandlestick-data

@@ -10,7 +10,7 @@ import '../http_method.dart';
 import '../query_builder.dart';
 import '../serializer.dart';
 
-/// Best price/qty on the order book for a symbol or symbols.
+/// Best price/qty on the order book for symbols.
 ///
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#symbol-order-book-ticker

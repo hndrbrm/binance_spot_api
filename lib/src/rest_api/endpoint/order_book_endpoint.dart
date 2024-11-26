@@ -47,11 +47,16 @@ final class _Parameter implements QueryBuilder {
   const _Parameter({
     required this.symbol,
     this.limit,
-  });
+  })
+  : assert(
+    limit == null || limit <= 5000,
+    'Limit value are too high. Limit value maxed at 5000.'
+  );
 
   final String symbol;
 
-  /// Default 100; max 5000.
+  /// If null, default to 100.
+  ///
   /// If limit > 5000. then the response will truncate to 5000.
   final int? limit;
 

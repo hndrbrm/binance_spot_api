@@ -11,8 +11,9 @@ import '../http_method.dart';
 import '../query_builder.dart';
 import '../serializer.dart';
 
-/// 24 hour rolling window price change statistics. Careful when accessing
-/// this with no symbol.
+/// 24 hour rolling window price change statistics.
+///
+/// Careful when accessing this with no symbol.
 ///
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#24hr-ticker-price-change-statistics

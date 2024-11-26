@@ -2,7 +2,9 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
-enum RateLimitType {
+import '../rest_api/serializer.dart';
+
+enum RateLimitType implements Serializer {
   /// Example:
   /// {
   ///   "rateLimitType": "REQUEST_WEIGHT",
@@ -30,18 +32,22 @@ enum RateLimitType {
   /// }
   rawRequest;
 
-  static RateLimitType deserialize(String string) =>
+  factory RateLimitType.deserialize(String string) =>
     switch (string) {
-      'REQUEST_WEIGHT' => requestWeight,
-      'ORDERS' => order,
-      'RAW_REQUESTS' => rawRequest,
+      _requestWeight => requestWeight,
+      _order => order,
+      _rawRequest => rawRequest,
       _ => throw UnimplementedError(string)
     };
-  
+
+  static const _requestWeight = 'REQUEST_WEIGHT';
+  static const _order = 'ORDERS';
+  static const _rawRequest = 'RAW_REQUESTS';
+
   String serialize() =>
     switch (this) {
-      requestWeight => 'REQUEST_WEIGHT',
-      order => 'ORDERS',
-      rawRequest => 'RAW_REQUESTS',
+      requestWeight => _requestWeight,
+      order => _order,
+      rawRequest => _rawRequest,
     };
 }
