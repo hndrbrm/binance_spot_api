@@ -5,6 +5,7 @@
 import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
+import '../query_builder.dart';
 
 /// Current average price for a symbol.
 ///
@@ -17,7 +18,7 @@ mixin AveragePriceEndpoint on EndpointCaller {
   static const weight = 2;
 
   Future<AveragePrice> averagePrice(String symbol) async {
-    final queries = _Parameter(symbol).toQueries();
+    final queries = _Parameter(symbol).buildQuery();
 
     final json = await call(
       endpoint: endpoint,
@@ -28,12 +29,13 @@ mixin AveragePriceEndpoint on EndpointCaller {
   }
 }
 
-final class _Parameter {
+final class _Parameter implements QueryBuilder {
   const _Parameter(this.symbol);
 
   final String symbol;
 
-  Map<String, dynamic> toQueries() => {
+  @override
+  Map<String, dynamic> buildQuery() => {
     'symbol': symbol,
   };
 }

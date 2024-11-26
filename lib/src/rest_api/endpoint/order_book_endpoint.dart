@@ -5,6 +5,7 @@
 import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
+import '../query_builder.dart';
 
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#order-book
@@ -30,7 +31,7 @@ mixin OrderBookEndpoint on EndpointCaller {
     final queries = _Parameter(
       symbol: symbol,
       limit: limit,
-    ).toQueries();
+    ).buildQuery();
 
     final json = await call(
       endpoint: endpoint,
@@ -41,7 +42,7 @@ mixin OrderBookEndpoint on EndpointCaller {
   }
 }
 
-final class _Parameter {
+final class _Parameter implements QueryBuilder {
   const _Parameter({
     required this.symbol,
     this.limit,
@@ -53,7 +54,8 @@ final class _Parameter {
   /// If limit > 5000. then the response will truncate to 5000.
   final int? limit;
 
-  Map<String, dynamic> toQueries() => {
+  @override
+  Map<String, dynamic> buildQuery() => {
     'symbol': symbol,
     if (limit != null)
     'limit': limit,

@@ -6,6 +6,7 @@ import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
 import '../interval.dart';
+import '../query_builder.dart';
 
 /// Kline/candlestick bars for a symbol. Klines are uniquely identified by
 /// their open time.
@@ -33,7 +34,7 @@ mixin KlinesEndpoint on EndpointCaller {
       endTime: endTime,
       timeZone: timeZone,
       limit: limit,
-    ).toQueries();
+    ).buildQuery();
 
     final json = await call(
       endpoint: endpoint,
@@ -46,7 +47,7 @@ mixin KlinesEndpoint on EndpointCaller {
   }
 }
 
-final class KlineParameter {
+final class KlineParameter implements QueryBuilder {
   const KlineParameter({
     required this.symbol,
     required this.interval,
@@ -85,7 +86,8 @@ final class KlineParameter {
   /// If null, will default to 500.
   final int? limit;
 
-  Map<String, dynamic> toQueries() => {
+  @override
+  Map<String, dynamic> buildQuery() => {
     'symbol': symbol,
     'interval': interval.serialize(),
     if (startTime != null)

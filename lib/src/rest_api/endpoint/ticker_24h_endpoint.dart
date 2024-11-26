@@ -8,6 +8,7 @@ import '../../enum/ticker_type.dart';
 import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
+import '../query_builder.dart';
 
 /// 24 hour rolling window price change statistics. Careful when accessing
 /// this with no symbol.
@@ -35,7 +36,7 @@ mixin Ticker24hEndpoint on EndpointCaller {
     final queries = _Parameter(
       symbols: symbols,
       type: type,
-    ).toQueries();
+    ).buildQuery();
 
     final json = await call(
       endpoint: endpoint,
@@ -55,7 +56,7 @@ mixin Ticker24hEndpoint on EndpointCaller {
   }
 }
 
-final class _Parameter {
+final class _Parameter implements QueryBuilder {
   const _Parameter({
     this.symbols,
     this.type,
@@ -67,7 +68,8 @@ final class _Parameter {
   /// If null, the default is [TickerType.full].
   final TickerType? type;
 
-  Map<String, dynamic> toQueries() => {
+  @override
+  Map<String, dynamic> buildQuery() => {
     if (symbols != null && symbols!.length == 1)
     'symbol': symbols![0],
     if (symbols != null && symbols!.length > 1)

@@ -36,7 +36,7 @@ mixin UiKlinesEndpoint on EndpointCaller {
       endTime: endTime,
       timeZone: timeZone,
       limit: limit,
-    ).toQueries();
+    ).buildQuery();
 
     final json = await call(
       endpoint: endpoint,

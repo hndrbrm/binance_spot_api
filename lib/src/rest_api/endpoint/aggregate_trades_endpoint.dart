@@ -5,9 +5,12 @@
 import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
+import '../query_builder.dart';
 
-/// Get compressed, aggregate trades. Trades that fill at the time, from
-/// the same taker order, with the same price will have the quantity aggregated.
+/// Get compressed, aggregate trades.
+///
+/// Trades that fill at the time, from the same taker order,
+/// with the same price will have the quantity aggregated.
 ///
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#compressedaggregate-trades-list
@@ -32,7 +35,7 @@ mixin AggregateTradesEndpoint on EndpointCaller {
       startTime: startTime,
       endTime: endTime,
       limit: limit,
-    ).toQueries();
+    ).buildQuery();
 
     final json = call(
       endpoint: endpoint,
@@ -45,7 +48,7 @@ mixin AggregateTradesEndpoint on EndpointCaller {
   }
 }
 
-final class _Parameter {
+final class _Parameter implements QueryBuilder {
   const _Parameter({
     required this.symbol,
     this.fromId,
@@ -68,7 +71,8 @@ final class _Parameter {
   /// Default 500; max 1000.
   final int? limit;
 
-  Map<String, dynamic> toQueries() => {
+  @override
+  Map<String, dynamic> buildQuery() => {
     'symbol': symbol,
     if (fromId != null)
     'fromId': fromId,

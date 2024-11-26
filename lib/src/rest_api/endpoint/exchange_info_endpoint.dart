@@ -12,6 +12,7 @@ import '../../filter/filter.dart';
 import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
+import '../query_builder.dart';
 
 /// Current exchange trading rules and symbol information
 ///
@@ -35,7 +36,7 @@ mixin ExchangeInfoEndpoint on EndpointCaller {
       permissions: permissions,
       showPermissionSets: showPermissionSets,
       symbolStatus: symbolStatus,
-    ).toQueries();
+    ).buildQuery();
 
     final json = await call(
       endpoint: endpoint,
@@ -46,7 +47,7 @@ mixin ExchangeInfoEndpoint on EndpointCaller {
   }
 }
 
-final class _Parameter {
+final class _Parameter implements QueryBuilder {
   const _Parameter({
     this.symbols,
     this.permissions,
@@ -76,7 +77,8 @@ final class _Parameter {
   /// Cannot be used in combination with [symbols].
   final SymbolStatus? symbolStatus;
 
-  Map<String, dynamic> toQueries() => {
+  @override
+  Map<String, dynamic> buildQuery() => {
     if (symbols != null && symbols!.length == 1)
     'symbol': symbols![0],
     if (symbols != null && symbols!.length > 1)

@@ -5,6 +5,7 @@
 import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
+import '../query_builder.dart';
 
 /// Get recent trades.
 ///
@@ -23,7 +24,7 @@ mixin TradesEndpoint on EndpointCaller {
     final queries = _Parameter(
       symbol: symbol,
       limit: limit,
-    ).toQueries();
+    ).buildQuery();
 
     final json = await call(
       endpoint: endpoint,
@@ -37,7 +38,7 @@ mixin TradesEndpoint on EndpointCaller {
   }
 }
 
-final class _Parameter {
+final class _Parameter implements QueryBuilder {
   _Parameter({
     required this.symbol,
     this.limit,
@@ -52,7 +53,8 @@ final class _Parameter {
   /// If value is null, then default to 500.
   final int? limit;
 
-  Map<String, dynamic> toQueries() => {
+  @override
+  Map<String, dynamic> buildQuery() => {
     'symbol': symbol,
     if (limit != null)
     'limit': limit,

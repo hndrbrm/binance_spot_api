@@ -7,6 +7,7 @@ import 'dart:convert';
 import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
+import '../query_builder.dart';
 
 /// Best price/qty on the order book for a symbol or symbols.
 ///
@@ -26,7 +27,7 @@ mixin TickerBookEndpoint on EndpointCaller {
     };
 
   Future<List<TickerBook>> tickerBook([ List<String>? symbols ]) async {
-    final queries = _Parameter(symbols).toQueries();
+    final queries = _Parameter(symbols).buildQuery();
 
     final json = await call(
       endpoint: endpoint,
@@ -46,13 +47,14 @@ mixin TickerBookEndpoint on EndpointCaller {
   }
 }
 
-final class _Parameter {
+final class _Parameter implements QueryBuilder {
   const _Parameter([ this.symbols ]);
 
   /// If null, bookTickers for all symbols will be returned in an array.
   final List<String>? symbols;
 
-  Map<String, dynamic> toQueries() => {
+  @override
+  Map<String, dynamic> buildQuery() => {
     if (symbols != null && symbols!.length == 1)
     'symbol': symbols![0],
     if (symbols != null && symbols!.length > 1)

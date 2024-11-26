@@ -10,6 +10,7 @@ import '../data_source.dart';
 import '../endpoint_caller.dart';
 import '../http_method.dart';
 import '../interval.dart';
+import '../query_builder.dart';
 
 /// Rolling window price change statistics.
 ///
@@ -33,7 +34,7 @@ mixin TickerEndpoint on EndpointCaller {
       symbols: symbols,
       windowSize: windowSize,
       type: type,
-    ).toQueries();
+    ).buildQuery();
 
     final json = await call(
       endpoint: endpoint,
@@ -63,7 +64,7 @@ mixin TickerEndpoint on EndpointCaller {
 /// E.g. If the closeTime is 1641287867099 (January 04, 2022 09:17:47:099 UTC),
 /// and the [windowSize] is [Interval.oneDay]. the openTime will be:
 /// 1641201420000 (January 3, 2022, 09:17:00)
-final class _Parameter {
+final class _Parameter implements QueryBuilder {
   _Parameter({
     required this.symbols,
     this.windowSize,
@@ -94,7 +95,8 @@ final class _Parameter {
   /// The default is [TickerType.full]
   final TickerType? type;
 
-  Map<String, dynamic> toQueries() => {
+  @override
+  Map<String, dynamic> buildQuery() => {
     if (symbols.length == 1)
     'symbol': symbols[0],
     if (symbols.length > 1)
