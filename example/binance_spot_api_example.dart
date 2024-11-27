@@ -6,6 +6,6 @@ import 'package:binance_spot_api/binance_spot_api.dart';
 
 Future<void> main() async {
   final client = WholeApi();
-  final a = await client.historicalTrades(symbol: 'BTCUSDT');
+  final a = await client.tickerTrading(symbols: ['BTCUSDT']);
   print(a.first.serialize());
 }

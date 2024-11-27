@@ -13,27 +13,25 @@ import '../../interval.dart';
 import '../../query_builder.dart';
 import '../../serializer.dart';
 
-/// Rolling window price change statistics.
-///
-/// This endpoint is different from the [Ticker24hEndpoint].
+/// Price change statistics for a trading day.
 ///
 /// Reference:
-/// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#rolling-window-price-change-statistics
-mixin TickerEndpoint on EndpointCaller {
+/// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#trading-day-ticker
+mixin TickerTradingEndpoint on EndpointCaller {
   static const dataSource = DataSource.database;
-  static const endpoint = 'api/v3/ticker';
+  static const endpoint = 'api/v3/ticker/tradingDay';
   static const method = HttpMethod.get;
 
   static int weight(List<String> symbols) => max(symbols.length * 4, 200);
 
-  Future<List<Ticker>> ticker({
+  Future<List<Ticker>> tickerTrading({
     required List<String> symbols,
-    Interval? windowSize,
+    String? timeZone,
     TickerType? type,
   }) async {
     final queries = _Parameter(
       symbols: symbols,
-      windowSize: windowSize,
+      timeZone: timeZone,
       type: type,
     ).buildQuery();
 
@@ -68,7 +66,7 @@ mixin TickerEndpoint on EndpointCaller {
 final class _Parameter implements QueryBuilder {
   _Parameter({
     required this.symbols,
-    this.windowSize,
+    this.timeZone,
     this.type,
   })
   : assert(symbols.isNotEmpty, 'Symbols must be provided.'),
@@ -76,23 +74,16 @@ final class _Parameter implements QueryBuilder {
       symbols.length <= 100,
       'The number of symbols requested are too high. '
       'Maximum number of symbols allowed in a request is 100',
-    ),
-    assert(() {
-      if (windowSize != null) {
-        return switch (windowSize.unit) {
-          IntervalUnit.minute => windowSize.value.between(1, 59),
-          IntervalUnit.hour => windowSize.value.between(1, 23),
-          IntervalUnit.day => windowSize.value.between(1, 7),
-          _ => false,
-        };
-      }
-      return true;
-    }(), 'Invalid windowSize value.');
+    );
 
   final List<String> symbols;
 
-  /// If null, default to [Interval.oneDay].
-  final Interval? windowSize;
+  /// Supported values for timeZone:
+  /// * Hours and minutes (e.g. -1:00, 05:45)
+  /// * Only hours (e.g. 0, 8, 4)
+  ///
+  /// If null, default to 0 (UTC).
+  final String? timeZone;
 
   /// If null, default to [TickerType.full].
   final TickerType? type;
@@ -103,8 +94,8 @@ final class _Parameter implements QueryBuilder {
     'symbol': symbols[0],
     if (symbols.length > 1)
     'symbols': jsonEncode(symbols),
-    if (windowSize != null)
-    'windowSize': windowSize!.serialize(),
+    if (timeZone != null)
+    'timeZone': timeZone,
     if (type != null)
     'type': type!.serialize(),
   };
@@ -178,10 +169,4 @@ final class Ticker implements Serializer {
     _lastId: lastId,
     _count: count,
   };
-}
-
-extension on int {
-  bool between(int a, int b) {
-    return a <= this && this <= b;
-  }
 }

@@ -14,6 +14,7 @@ import 'endpoint/market_data/ticker_24h_endpoint.dart';
 import 'endpoint/market_data/ticker_book_endpoint.dart';
 import 'endpoint/market_data/ticker_endpoint.dart';
 import 'endpoint/market_data/ticker_price_endpoint.dart';
+import 'endpoint/market_data/ticker_trading_endpoint.dart';
 import 'endpoint/market_data/trades_endpoint.dart';
 import 'endpoint_caller.dart';
 import 'general.dart';
@@ -36,6 +37,7 @@ final class WholeApi with
   TickerBookEndpoint,
   TickerEndpoint,
   TickerPriceEndpoint,
+  TickerTradingEndpoint,
   TradesEndpoint,
   KlinesEndpoint
 {
