@@ -4,8 +4,9 @@
 
 import '../rest_api/serializer.dart';
 
-/// Reference:
-/// https://github.com/binance/binance-spot-api-docs/blob/master/enums.md#order-side-side
+/// References:
+/// * https://github.com/binance/binance-spot-api-docs/blob/master/enums.md#order-side-side
+/// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/enums.md#order-side-side
 enum OrderSide implements Serializer {
   buy,
   sell;
