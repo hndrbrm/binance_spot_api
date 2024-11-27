@@ -2,8 +2,11 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
-/// Reference:
-/// https://github.com/binance/binance-spot-api-docs/blob/master/enums.md#account-and-symbol-permissions-permissions
+/// Only spot supported on testnet.
+///
+/// References:
+/// * https://github.com/binance/binance-spot-api-docs/blob/master/enums.md#account-and-symbol-permissions-permissions
+/// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/enums.md#account-and-symbol-permissions-permissions
 enum Permission {
   spot,
   margin,
