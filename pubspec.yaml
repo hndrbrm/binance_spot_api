@@ -8,6 +8,9 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
+  asn1lib: ^1.5.8
+  convert: 3.1.2
+  cryptography: ^2.7.0
   http: ^1.2.2
 
 dev_dependencies:

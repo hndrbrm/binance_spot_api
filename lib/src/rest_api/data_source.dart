@@ -14,6 +14,9 @@
 ///
 /// These are the three sources, ordered by least to most potential for delays
 /// in data updates.
+///
+/// Reference:
+/// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#data-sources
 enum DataSource {
   /// The data is from the Matching Engine.
   matchingEngine,
