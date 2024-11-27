@@ -4,6 +4,9 @@
 
 import '../rest_api/serializer.dart';
 
+/// References:
+/// * https://github.com/binance/binance-spot-api-docs/blob/master/enums.md#rate-limiters-ratelimittype
+/// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/enums.md#rate-limiters-ratelimittype
 enum RateLimitType implements Serializer {
   /// Example:
   /// {
@@ -44,6 +47,7 @@ enum RateLimitType implements Serializer {
   static const _order = 'ORDERS';
   static const _rawRequest = 'RAW_REQUESTS';
 
+  @override
   String serialize() =>
     switch (this) {
       requestWeight => _requestWeight,
