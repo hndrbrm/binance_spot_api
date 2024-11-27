@@ -5,6 +5,7 @@
 import '../../data_source.dart';
 import '../../endpoint_caller.dart';
 import '../../http_method.dart';
+import '../../security_type.dart';
 import '../../serializer.dart';
 
 /// Test connectivity to the Rest API and get the current server time.
@@ -12,6 +13,7 @@ import '../../serializer.dart';
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#check-server-time
 mixin TimeEndpoint on EndpointCaller {
+  static const securityType = SecurityType.none;
   static const dataSource = DataSource.memory;
   static const endpoint = 'api/v3/time';
   static const method = HttpMethod.get;

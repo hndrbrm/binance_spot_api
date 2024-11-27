@@ -8,6 +8,7 @@ import '../../data_source.dart';
 import '../../endpoint_caller.dart';
 import '../../http_method.dart';
 import '../../query_builder.dart';
+import '../../security_type.dart';
 import '../../serializer.dart';
 
 /// Best price/qty on the order book for symbols.
@@ -15,6 +16,7 @@ import '../../serializer.dart';
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#symbol-order-book-ticker
 mixin TickerBookEndpoint on EndpointCaller {
+  static const securityType = SecurityType.none;
   static const dataSource = DataSource.memory;
   static const endpoint = 'api/v3/ticker/bookTicker';
   static const method = HttpMethod.get;

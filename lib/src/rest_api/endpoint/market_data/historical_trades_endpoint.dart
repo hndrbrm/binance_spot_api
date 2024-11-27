@@ -6,6 +6,7 @@ import '../../data_source.dart';
 import '../../endpoint_caller.dart';
 import '../../http_method.dart';
 import '../../query_builder.dart';
+import '../../security_type.dart';
 import 'trades_endpoint.dart';
 
 /// Get older trades.
@@ -13,6 +14,7 @@ import 'trades_endpoint.dart';
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#old-trade-lookup
 mixin HistoricalTradesEndpoint on EndpointCaller {
+  static const securityType = SecurityType.none;
   static const dataSource = DataSource.database;
   static const endpoint = 'api/v3/historicalTrades';
   static const method = HttpMethod.get;

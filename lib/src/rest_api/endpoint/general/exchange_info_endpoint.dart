@@ -4,9 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:binance_spot_api/src/rest_api/http_return_code.dart';
-import 'package:binance_spot_api/src/rest_api/interval.dart';
-
 import '../../../enum/permission.dart';
 import '../../../enum/rate_limit_interval.dart';
 import '../../../enum/rate_limit_type.dart';
@@ -16,6 +13,7 @@ import '../../data_source.dart';
 import '../../endpoint_caller.dart';
 import '../../http_method.dart';
 import '../../query_builder.dart';
+import '../../security_type.dart';
 import '../../serializer.dart';
 
 /// Current exchange trading rules and symbol information
@@ -23,6 +21,7 @@ import '../../serializer.dart';
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#exchange-information
 mixin ExchangeInfoEndpoint on EndpointCaller {
+  static const securityType = SecurityType.none;
   static const dataSource = DataSource.memory;
   static const endpoint = 'api/v3/exchangeInfo';
   static const method = HttpMethod.get;

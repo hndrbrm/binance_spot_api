@@ -5,12 +5,14 @@
 import '../../data_source.dart';
 import '../../endpoint_caller.dart';
 import '../../http_method.dart';
+import '../../security_type.dart';
 
 /// Test connectivity to the Rest API.
 ///
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#test-connectivity
 mixin PingEndpoint on EndpointCaller {
+  static const securityType = SecurityType.none;
   static const dataSource = DataSource.memory;
   static const endpoint = 'api/v3/ping';
   static const method = HttpMethod.get;

@@ -6,6 +6,7 @@ import '../../data_source.dart';
 import '../../endpoint_caller.dart';
 import '../../http_method.dart';
 import '../../query_builder.dart';
+import '../../security_type.dart';
 import '../../serializer.dart';
 
 /// Current average price for a symbol.
@@ -13,6 +14,7 @@ import '../../serializer.dart';
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#current-average-price
 mixin AvgPriceEndpoint on EndpointCaller {
+  static const securityType = SecurityType.none;
   static const dataSource = DataSource.memory;
   static const endpoint = 'api/v3/avgPrice';
   static const method = HttpMethod.get;

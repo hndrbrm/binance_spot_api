@@ -5,6 +5,7 @@
 import '../../data_source.dart';
 import '../../endpoint_caller.dart';
 import '../../http_method.dart';
+import '../../security_type.dart';
 import 'klines_endpoint.dart';
 
 /// The request is similar to [KlinesEndpoint] having the same parameters
@@ -16,6 +17,7 @@ import 'klines_endpoint.dart';
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#uiklines
 mixin UiKlinesEndpoint on EndpointCaller {
+  static const securityType = SecurityType.none;
   static const dataSource = DataSource.database;
   static const endpoint = 'api/v3/uiKlines';
   static const method = HttpMethod.get;

@@ -7,6 +7,7 @@ import '../../endpoint_caller.dart';
 import '../../http_method.dart';
 import '../../interval.dart';
 import '../../query_builder.dart';
+import '../../security_type.dart';
 import '../../serializer.dart';
 
 /// Kline/candlestick bars for a symbol.
@@ -16,6 +17,7 @@ import '../../serializer.dart';
 /// Reference:
 /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#klinecandlestick-data
 mixin KlinesEndpoint on EndpointCaller {
+  static const securityType = SecurityType.none;
   static const dataSource = DataSource.database;
   static const endpoint = 'api/v3/klines';
   static const method = HttpMethod.get;
