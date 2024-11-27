@@ -4,6 +4,9 @@
 
 import '../rest_api/serializer.dart';
 
+/// References:
+/// * https://github.com/binance/binance-spot-api-docs/blob/master/enums.md#rate-limit-intervals-interval
+/// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/enums.md#rate-limit-intervals-interval
 enum RateLimitInterval implements Serializer {
   second,
   minute,
