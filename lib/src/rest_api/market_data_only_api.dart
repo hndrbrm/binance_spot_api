@@ -18,7 +18,7 @@ import 'endpoint/market_data/ui_klines_endpoint.dart';
 import 'endpoint_caller.dart';
 
 /// No API key (authentication) required, and serve public market data only.
-final class MarketDataOnly with
+final class MarketDataOnlyApi with
   EndpointCaller,
 
   AggTradesEndpoint, AvgPriceEndpoint, ExchangeInfoEndpoint,

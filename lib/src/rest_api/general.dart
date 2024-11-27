@@ -19,11 +19,11 @@ final class General {
   /// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#general-api-information
   /// https://github.com/binance/binance-spot-api-docs/blob/master/faqs/market_data_only.md
   static const endpoints = <String>{
-    'https://api.binance.com',
-    'https://api-gcp.binance.com',
-    'https://api1.binance.com',
-    'https://api2.binance.com',
-    'https://api3.binance.com',
-    'https://api4.binance.com',
+    'api.binance.com',
+    'api-gcp.binance.com',
+    'api1.binance.com',
+    'api2.binance.com',
+    'api3.binance.com',
+    'api4.binance.com',
   };
 }
