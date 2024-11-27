@@ -4,6 +4,9 @@
 
 import 'dart:convert';
 
+import 'package:binance_spot_api/src/rest_api/http_return_code.dart';
+import 'package:binance_spot_api/src/rest_api/interval.dart';
+
 import '../../../enum/permission.dart';
 import '../../../enum/rate_limit_interval.dart';
 import '../../../enum/rate_limit_type.dart';
@@ -162,6 +165,13 @@ final class ExchangeInfo implements Serializer {
   };
 }
 
+/// An [Interval.fiveMinute] with [value] 5 means "Every 5 minutes".
+///
+/// Requests fail with [HttpReturnCode.breakingRequestRateLimit] when you
+/// exceed the request rate limit.
+///
+/// Reference:
+/// https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#general-info-on-limits
 final class RateLimit implements Serializer {
   RateLimit.deserialize(Map<String, dynamic> map)
   : type = RateLimitType.deserialize(map[_type]),
