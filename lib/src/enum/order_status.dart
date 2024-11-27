@@ -2,10 +2,12 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
+import '../rest_api/serializer.dart';
+
 /// References:
 /// * https://github.com/binance/binance-spot-api-docs/blob/master/enums.md#order-status-status
 /// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/enums.md#order-status-status
-enum OrderStatus {
+enum OrderStatus implements Serializer {
   /// The order has been accepted by the engine.
   newOrder,
 
@@ -63,7 +65,8 @@ enum OrderStatus {
   static const _expired = 'EXPIRED';
   static const _expiredInMatch = 'EXPIRED_IN_MATCH';
   
-  String serialized() =>
+  @override
+  String serialize() =>
     switch (this) {
       newOrder => _newOrder,
       pendingNew => _pendingNew,

@@ -2,6 +2,8 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
+import '../rest_api/serializer.dart';
+
 /// Applied for both Rest API and Websocket API.
 ///
 /// Also applied for testnet.
@@ -9,7 +11,7 @@
 /// References:
 /// * https://github.com/binance/binance-spot-api-docs/blob/master/enums.md#symbol-status-status
 /// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/enums.md#symbol-status-status
-enum SymbolStatus {
+enum SymbolStatus implements Serializer {
   preTrading,
   trading,
   postTrading,
@@ -38,6 +40,7 @@ enum SymbolStatus {
   static const _auctionMatch = 'AUCTION_MATCH';
   static const _break = 'BREAK';
   
+  @override
   String serialize() =>
     switch (this) {
       preTrading => _preTrading,
