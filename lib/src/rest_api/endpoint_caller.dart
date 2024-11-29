@@ -7,20 +7,21 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 import '../error/error_exception.dart';
+import 'base_api.dart';
 import 'http_return_code.dart';
 
 mixin EndpointCaller {
-  String get base;
+  BaseApi get baseApi;
 
   Future<dynamic> call({
     required String endpoint,
     Map<String, dynamic>? queries
   }) async {
-    final url = 'https://$base/$endpoint${queries?.build() ?? ''}';
+    final url = 'https://${baseApi.serialize()}/$endpoint${queries?.build() ?? ''}';
     final uri = Uri.parse(url);
     final response = await get(uri);
-    final code = HttpReturnCode.parse(response.statusCode);
-    if (code == HttpReturnCode.ok) {
+    final code = HttpReturnCode.deserialize(response.statusCode);
+    if (code == Ok()) {
       return response.body.decode();
     }
 
@@ -28,7 +29,7 @@ mixin EndpointCaller {
       final json = jsonDecode(response.body);
       throw ErrorException.deserialize(json);
     } on FormatException {
-      throw Exception('Error (${response.statusCode}): ${code.name}\n\n${response.body}');
+      throw Exception('Error (${response.statusCode}): ${code.serialize()}\n\n${response.body}');
     }
   }
 }

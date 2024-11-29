@@ -2,6 +2,7 @@
 // All rights reserved. Use of this source code is governed
 // by a BSD-style license that can be found in the LICENSE file.
 
+import 'base_api.dart';
 import 'endpoint/general/exchange_info_endpoint.dart';
 import 'endpoint/general/ping_endpoint.dart';
 import 'endpoint/general/time_endpoint.dart';
@@ -17,7 +18,6 @@ import 'endpoint/market_data/ticker_price_endpoint.dart';
 import 'endpoint/market_data/ticker_trading_endpoint.dart';
 import 'endpoint/market_data/trades_endpoint.dart';
 import 'endpoint_caller.dart';
-import 'general.dart';
 
 final class WholeApi with
   EndpointCaller,
@@ -42,5 +42,5 @@ final class WholeApi with
   KlinesEndpoint
 {
   @override
-  String get base => General.endpoints.elementAt(0);
+  BaseApi get baseApi => BaseApi.api;
 }
