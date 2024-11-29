@@ -9,8 +9,8 @@ import 'request_issue.dart';
 
 /// Any endpoint can return an ERROR.
 ///
-/// Errors consist of two parts: an error code and a message.
-/// Codes are universal, but messages can vary.
+/// Errors consist of two parts: an error [code] and a [message].
+/// [code]s are universal, but [message]s can vary.
 ///
 /// Example:
 /// {
@@ -18,8 +18,9 @@ import 'request_issue.dart';
 ///   "msg":"Invalid symbol."
 /// }
 ///
-/// Reference:
-/// https://github.com/binance/binance-spot-api-docs/blob/master/errors.md
+/// References:
+/// * https://github.com/binance/binance-spot-api-docs/blob/master/errors.md
+/// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/errors.md
 final class ErrorException implements Exception, Serializer {
   ErrorException.deserialize(Map<String, dynamic> map)
   : code = ErrorCode.parse(map['code']),
@@ -30,22 +31,20 @@ final class ErrorException implements Exception, Serializer {
 
   @override
   Map<String, dynamic> serialize() => {
-    'code': code.value,
+    'code': code.serialize(),
     'msg': message,
   };
 
   @override
-  String toString() => 'Error (${code.value}): $message';
+  String toString() => 'Error (${code.serialize()}): $message';
 }
 
-abstract class ErrorCode {
-  int get value;
-
+abstract class ErrorCode implements Serializer {
   static ErrorCode parse(int code) =>
     switch (code) {
-      <=-1000 && >-1100 => NetworkIssue.parse(code),
-      <=-1100 && >-1200 => RequestIssue.parse(code),
-      <=-2000 && >-2100 => OtherIssue.parse(code),
+      <=-1000 && >-1100 => NetworkIssue.deserialize(code),
+      <=-1100 && >-1200 => RequestIssue.deserialize(code),
+      <=-2000 && >-2100 => OtherIssue.deserialize(code),
       _ => throw UnimplementedError('$code'),
     };
 }

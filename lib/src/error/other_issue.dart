@@ -5,6 +5,8 @@
 import 'error_exception.dart';
 
 enum OtherIssue implements ErrorCode {
+  /// NEW_ORDER_REJECTED
+  ///
   /// This code is sent when an error has been returned by the matching engine.
   ///
   /// See Further documentation on:
@@ -12,9 +14,12 @@ enum OtherIssue implements ErrorCode {
   ///
   /// References:
   /// * https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#-2010-new_order_rejected
+  /// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/errors.md#-2010-new_order_rejected
   /// * https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#messages-for--1010-error_msg_received--2010-new_order_rejected-and--2011-cancel_rejected
   newOrderRejected,
 
+  /// CANCEL_REJECTED
+  ///
   /// This code is sent when an error has been returned by the matching engine.
   ///
   /// See Further documentation on:
@@ -22,33 +27,48 @@ enum OtherIssue implements ErrorCode {
   ///
   /// References:
   /// * https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#-2011-cancel_rejected
+  /// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/errors.md#-2011-cancel_rejected
   /// * https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#messages-for--1010-error_msg_received--2010-new_order_rejected-and--2011-cancel_rejected
   cancelRejected,
 
+  /// NO_SUCH_ORDER
+  ///
   /// Order does not exist.
   ///
-  /// Reference:
-  /// https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#-2013-no_such_order
+  /// References:
+  /// * https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#-2013-no_such_order
+  /// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/errors.md#-2013-no_such_order
   noSuchOrder,
 
+  /// BAD_API_KEY_FMT
+  ///
   /// API-key format invalid.
   ///
-  /// Reference:
-  /// https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#-2014-bad_api_key_fmt
+  /// References:
+  /// * https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#-2014-bad_api_key_fmt
+  /// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/errors.md#-2014-bad_api_key_fmt
   badApiKeyFmt,
 
+  /// REJECTED_MBX_KEY
+  ///
   /// Invalid API-key, IP, or permissions for action.
   ///
-  /// Reference:
-  /// https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#-2015-rejected_mbx_key
+  /// References:
+  /// * https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#-2015-rejected_mbx_key
+  /// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/errors.md#-2015-rejected_mbx_key
   rejectedMbxKey,
 
+  /// NO_TRADING_WINDOW
+  ///
   /// No trading window could be found for the symbol. Try ticker/24hrs instead.
   ///
-  /// Reference:
-  /// https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#-2016-no_trading_window
+  /// References:
+  /// * https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#-2016-no_trading_window
+  /// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/errors.md#-2016-no_trading_window
   noTradingWindow,
 
+  /// Order cancel-replace partially failed
+  ///
   /// This code is sent when either the cancellation of the order failed or
   /// the new order placement failed but not both.
   ///
@@ -109,9 +129,12 @@ enum OtherIssue implements ErrorCode {
   ///
   /// References:
   /// * https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#-2021-order-cancel-replace-partially-failed
+  /// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/errors.md#-2021-order-cancel-replace-partially-failed
   /// * https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#filter-failures
   orderCancelReplacePartiallyFailed,
 
+  /// Order cancel-replace failed.
+  ///
   /// This code is sent when both the cancellation of the order failed and
   /// the new order placement failed.
   ///
@@ -119,40 +142,55 @@ enum OtherIssue implements ErrorCode {
   ///
   /// References:
   /// * https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#-2022-order-cancel-replace-failed
+  /// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/errors.md#-2022-order-cancel-replace-failed
   /// * https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#filter-failures
   orderCancelReplaceFailed,
 
+  /// ORDER_ARCHIVED
+  ///
   /// Order was canceled or expired with no executed qty over 90 days ago and
   /// has been archived.
   ///
-  /// Reference:
-  /// https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#-2026-order_archived
+  /// References:
+  /// * https://github.com/binance/binance-spot-api-docs/blob/master/errors.md#-2026-order_archived
+  /// * https://github.com/binance/binance-spot-api-docs/blob/master/testnet/errors.md#-2026-order_archived
   orderArchived;
 
-  static OtherIssue parse(int code) =>
+  factory OtherIssue.deserialize(int code) =>
     switch (code) {
-      -2010 => newOrderRejected,
-      -2011 => cancelRejected,
-      -2013 => noSuchOrder,
-      -2014 => badApiKeyFmt,
-      -2015 => rejectedMbxKey,
-      -2016 => noTradingWindow,
-      -2021 => orderCancelReplacePartiallyFailed,
-      -2022 => orderCancelReplaceFailed,
-      -2026 => orderArchived,
+      _newOrderRejected => newOrderRejected,
+      _cancelRejected => cancelRejected,
+      _noSuchOrder => noSuchOrder,
+      _badApiKeyFmt => badApiKeyFmt,
+      _rejectedMbxKey => rejectedMbxKey,
+      _noTradingWindow => noTradingWindow,
+      _orderCancelReplacePartiallyFailed => orderCancelReplacePartiallyFailed,
+      _orderCancelReplaceFailed => orderCancelReplaceFailed,
+      _orderArchived => orderArchived,
       _ => throw UnimplementedError('$code'),
     };
+  
+  static const _newOrderRejected = -2010;
+  static const _cancelRejected = -2011;
+  static const _noSuchOrder = -2013;
+  static const _badApiKeyFmt = -2014;
+  static const _rejectedMbxKey = -2015;
+  static const _noTradingWindow = -2016;
+  static const _orderCancelReplacePartiallyFailed = -2021;
+  static const _orderCancelReplaceFailed = -2022;
+  static const _orderArchived = -2026;
 
   @override
-  int get value => switch (this) {
-    newOrderRejected => -2010,
-    cancelRejected => -2011,
-    noSuchOrder => -2013,
-    badApiKeyFmt => -2014,
-    rejectedMbxKey => -2015,
-    noTradingWindow => -2016,
-    orderCancelReplacePartiallyFailed => -2021,
-    orderCancelReplaceFailed => -2022,
-    orderArchived => -2026,
-  };
+  int serialize() =>
+    switch (this) {
+      newOrderRejected => _newOrderRejected,
+      cancelRejected => _cancelRejected,
+      noSuchOrder => _noSuchOrder,
+      badApiKeyFmt => _badApiKeyFmt,
+      rejectedMbxKey => _rejectedMbxKey,
+      noTradingWindow => _noTradingWindow,
+      orderCancelReplacePartiallyFailed => _orderCancelReplacePartiallyFailed,
+      orderCancelReplaceFailed => _orderCancelReplaceFailed,
+      orderArchived => _orderArchived,
+    };
 }
